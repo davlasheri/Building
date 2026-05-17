@@ -1,365 +1,361 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="ka" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Velocity Build | Rapid Construction. Premium Insulation.</title>
+    <title>Velocity Build | სწრაფი მშენებლობა. პრემიუმ იზოლაცია.</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'vb-navy':   '#1e3a8a',
-                        'vb-dark':   '#0f1e4a',
-                        'vb-ink':    '#0a1628',
-                        'vb-orange': '#f97316',
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                        navy:   '#1e3a8a',
+                        dark:   '#0f1e4a',
+                        ink:    '#0a1628',
+                        orange: '#f97316',
                     }
                 }
             }
         }
     </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
-
-        .hero-bg {
-            background: linear-gradient(135deg, #0a1628 0%, #1e3a8a 55%, #162d6e 100%);
-        }
-        .grid-lines {
-            background-image:
-                linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-            background-size: 44px 44px;
-        }
-
-        .nav-link { position: relative; }
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -3px; left: 0;
-            width: 0; height: 2px;
-            background: #f97316;
-            transition: width .25s ease;
-        }
-        .nav-link:hover::after { width: 100%; }
-
+        .hero-bg { background: linear-gradient(135deg, #0a1628 0%, #1e3a8a 60%, #162d6e 100%); }
         #mobile-menu { display: none; }
         #mobile-menu.open { display: block; }
-
+        .img-box {
+            background: #1e293b;
+            position: relative;
+            overflow: hidden;
+        }
+        .img-box img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform .4s ease;
+        }
+        .img-box:hover img { transform: scale(1.05); }
         .vb-input:focus {
             outline: none;
             border-color: #1e3a8a;
             box-shadow: 0 0 0 3px rgba(30,58,138,.12);
         }
-
         .pkg-card {
             border: 2px solid #e2e8f0;
-            border-radius: 2px;
+            border-radius: 4px;
             padding: 1rem;
             text-align: center;
             cursor: pointer;
             transition: all .2s;
         }
-        .pkg-card.active {
-            border-color: #1e3a8a;
-            background: rgba(30,58,138,.06);
-        }
+        .pkg-card.active { border-color: #1e3a8a; background: rgba(30,58,138,.06); }
         .pkg-card:hover:not(.active) { border-color: #94a3b8; }
-
-        .reveal {
-            opacity: 0;
-            transform: translateY(24px);
-            transition: opacity .55s ease, transform .55s ease;
-        }
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #1e3a8a; border-radius: 3px; }
     </style>
 </head>
 <body class="bg-white text-slate-800 antialiased">
 
-<nav id="navbar" class="fixed top-0 inset-x-0 z-50 bg-white/95 backdrop-blur-sm border-b border-slate-200 shadow-sm transition-shadow duration-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16">
-            <a href="#" class="flex items-center gap-2.5">
-                <div class="w-8 h-8 bg-vb-navy rounded flex items-center justify-center flex-shrink-0">
-                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                </div>
-                <span class="text-xl font-black tracking-tight text-vb-navy">Velocity<span class="text-vb-orange">Build</span></span>
-            </a>
-            <div class="hidden md:flex items-center gap-8">
-                <a href="#solutions" class="nav-link text-sm font-medium text-slate-600 hover:text-vb-navy transition-colors">Solutions</a>
-                <a href="#products" class="nav-link text-sm font-medium text-slate-600 hover:text-vb-navy transition-colors">Product Catalog</a>
-                <a href="#advantages" class="nav-link text-sm font-medium text-slate-600 hover:text-vb-navy transition-colors">Engineering</a>
-                <a href="#quote" class="nav-link text-sm font-medium text-slate-600 hover:text-vb-navy transition-colors">Get a Quote</a>
+<!-- NAV -->
+<nav class="fixed top-0 inset-x-0 z-50 bg-white/95 backdrop-blur-sm border-b border-slate-200 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+        <a href="#" class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-navy rounded flex items-center justify-center">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             </div>
-            <a href="#quote" class="hidden md:inline-flex items-center gap-2 bg-vb-orange hover:bg-orange-600 text-white text-sm font-bold px-5 py-2.5 rounded transition-all duration-200 hover:-translate-y-px hover:shadow-lg hover:shadow-orange-200">Request Quote <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-            <button id="hamburger" class="md:hidden p-2 text-slate-500 hover:text-vb-navy" aria-label="Toggle menu">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-            </button>
+            <span class="text-lg font-black text-navy">Velocity<span class="text-orange">Build</span></span>
+        </a>
+        <div class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-600">
+            <a href="#projects" class="hover:text-navy transition-colors">პროექტები</a>
+            <a href="#products" class="hover:text-navy transition-colors">პროდუქტები</a>
+            <a href="#why" class="hover:text-navy transition-colors">უპირატესობები</a>
+            <a href="#quote" class="hover:text-navy transition-colors">ფასი</a>
         </div>
+        <a href="#quote" class="hidden md:inline-flex items-center gap-1.5 bg-orange hover:bg-orange-600 text-white text-sm font-bold px-5 py-2.5 rounded transition-all hover:-translate-y-px hover:shadow-lg">
+            ფასის მოთხოვნა
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+        <button id="hamburger" class="md:hidden p-2 text-slate-500">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
     </div>
     <div id="mobile-menu" class="md:hidden bg-white border-t border-slate-100">
         <div class="px-5 py-4 flex flex-col gap-1">
-            <a href="#solutions" class="text-sm font-medium text-slate-600 py-2.5 border-b border-slate-100">Solutions</a>
-            <a href="#products" class="text-sm font-medium text-slate-600 py-2.5 border-b border-slate-100">Product Catalog</a>
-            <a href="#advantages" class="text-sm font-medium text-slate-600 py-2.5 border-b border-slate-100">Engineering</a>
-            <a href="#quote" class="text-sm font-medium text-slate-600 py-2.5 border-b border-slate-100">Get a Quote</a>
-            <a href="#quote" class="mt-3 flex items-center justify-center gap-2 bg-vb-orange text-white text-sm font-bold py-3 rounded">Request Quote &rarr;</a>
+            <a href="#projects" class="py-2.5 text-sm font-medium text-slate-600 border-b border-slate-100">პროექტები</a>
+            <a href="#products" class="py-2.5 text-sm font-medium text-slate-600 border-b border-slate-100">პროდუქტები</a>
+            <a href="#why" class="py-2.5 text-sm font-medium text-slate-600 border-b border-slate-100">უპირატესობები</a>
+            <a href="#quote" class="py-2.5 text-sm font-medium text-slate-600 border-b border-slate-100">ფასი</a>
+            <a href="#quote" class="mt-3 bg-orange text-white text-sm font-bold py-3 rounded text-center">ფასის მოთხოვნა &rarr;</a>
         </div>
     </div>
 </nav>
 
-<section class="relative min-h-screen hero-bg grid-lines flex items-center overflow-hidden pt-16">
-    <div class="absolute inset-0 pointer-events-none overflow-hidden">
-        <svg class="absolute right-0 top-0 h-full w-1/2 opacity-[0.04]" viewBox="0 0 400 800" preserveAspectRatio="none"><line x1="0" y1="0" x2="400" y2="800" stroke="white" stroke-width="1"/><line x1="80" y1="0" x2="480" y2="800" stroke="white" stroke-width="1"/><line x1="160" y1="0" x2="560" y2="800" stroke="white" stroke-width="1"/><line x1="240" y1="0" x2="640" y2="800" stroke="white" stroke-width="1"/><line x1="320" y1="0" x2="720" y2="800" stroke="white" stroke-width="1"/></svg>
-        <div class="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-vb-orange via-orange-400 to-transparent opacity-70"></div>
-        <div class="absolute -right-12 top-1/2 -translate-y-1/2 text-white/[0.018] font-black text-[18rem] leading-none select-none hidden xl:block tracking-tight">BUILD</div>
-    </div>
-    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 lg:py-36">
-        <div class="max-w-4xl">
-            <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 mb-7">
-                <span class="w-2 h-2 rounded-full bg-vb-orange animate-pulse"></span>
-                <span class="text-sm text-white/75 font-medium">Complete Sandwich Panel &amp; Steel Structure Packages</span>
-            </div>
-            <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.04] tracking-tight mb-6">The Future of<br><span class="text-vb-orange">Fast,</span> Energy&#8209;<br>Efficient Building.</h1>
-            <p class="text-lg sm:text-xl text-slate-300 max-w-2xl leading-relaxed mb-10">Velocity Build delivers the complete structural envelope — insulated wall panels, roof systems, structural steel, and every finishing component — engineered to mount directly onto your prepared concrete foundation. Your site is weathertight in days, not months.</p>
-            <div class="flex flex-col sm:flex-row gap-4">
-                <a href="#quote" class="inline-flex items-center justify-center gap-2 bg-vb-orange hover:bg-orange-600 text-white font-bold text-base px-8 py-4 rounded transition-all duration-200 hover:-translate-y-1 hover:shadow-2xl hover:shadow-orange-900/40">Request a Project Quote <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-                <a href="#products" class="inline-flex items-center justify-center gap-2 border-2 border-white/25 hover:border-white/55 text-white font-semibold text-base px-8 py-4 rounded transition-all duration-200 hover:bg-white/10">View Product Catalog <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></a>
-            </div>
-            <div class="mt-16 pt-8 border-t border-white/10 grid grid-cols-3 gap-6 max-w-md">
-                <div><div class="text-3xl font-black text-white">72 hr</div><div class="text-xs text-slate-400 mt-0.5 font-medium uppercase tracking-wide">Quote Turnaround</div></div>
-                <div><div class="text-3xl font-black text-white">50+</div><div class="text-xs text-slate-400 mt-0.5 font-medium uppercase tracking-wide">Projects Delivered</div></div>
-                <div><div class="text-3xl font-black text-white">EU</div><div class="text-xs text-slate-400 mt-0.5 font-medium uppercase tracking-wide">Grade Materials</div></div>
-            </div>
+<!-- HERO -->
+<section class="hero-bg min-h-screen flex items-center pt-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-24">
+        <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 mb-6">
+            <span class="w-2 h-2 rounded-full bg-orange animate-pulse"></span>
+            <span class="text-sm text-white/75">სენდვიჩ პანელები &middot; ფოლადის კარკასი &middot; სრული პაკეტი</span>
         </div>
-    </div>
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-white/30 animate-bounce"><span class="text-[10px] font-semibold tracking-[0.2em] uppercase">Scroll</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg></div>
-</section>
-
-<section id="solutions" class="py-24 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="mb-14 reveal">
-            <div class="flex items-center gap-3 mb-3"><div class="h-px w-10 bg-vb-orange"></div><span class="text-xs font-bold text-vb-orange uppercase tracking-[.15em]">Core Solutions</span></div>
-            <h2 class="text-4xl lg:text-5xl font-black text-vb-navy mb-4">Built for Your<br>Project Type</h2>
-            <p class="text-lg text-slate-500 max-w-2xl">From rapid-deployment logistics hubs to premium architectural commercial builds — our panel systems are engineered to deliver regardless of scale or complexity.</p>
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight mb-5">
+            სწრაფი და ენერგო&shy;ეფექტური<br>
+            <span class="text-orange">შენობების</span> მიწოდება
+        </h1>
+        <p class="text-lg text-slate-300 max-w-xl leading-relaxed mb-8">
+            ჩვენ მოგაწვდით სრულ სამშენებლო პაკეტს — კედლის პანელები, სახურავი,
+            ფოლადის კარკასი და ყველა სამაგრი ელემენტი. თქვენ მხოლოდ ბეტონის
+            საფუძველი გჭირდებათ — დანარჩენს ჩვენ ვაკეთებთ.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 mb-14">
+            <a href="#quote" class="inline-flex items-center justify-center gap-2 bg-orange hover:bg-orange-600 text-white font-bold px-7 py-4 rounded transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-orange-900/40">
+                ფასი მოითხოვე
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+            <a href="#projects" class="inline-flex items-center justify-center gap-2 border-2 border-white/25 hover:border-white/50 text-white font-semibold px-7 py-4 rounded transition-all">
+                ჩვენი პროექტები
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+            </a>
         </div>
-        <div class="grid md:grid-cols-2 gap-8">
-            <div class="reveal group relative rounded overflow-hidden h-[500px] border border-slate-200 cursor-pointer">
-                <div class="absolute inset-0 bg-gradient-to-br from-vb-dark to-vb-navy">
-                    <svg class="absolute inset-0 w-full h-full opacity-[0.18]" viewBox="0 0 500 500" preserveAspectRatio="none"><line x1="50" y1="0" x2="50" y2="500" stroke="white" stroke-width="0.8"/><line x1="100" y1="0" x2="100" y2="500" stroke="white" stroke-width="0.8"/><line x1="150" y1="0" x2="150" y2="500" stroke="white" stroke-width="0.8"/><line x1="200" y1="0" x2="200" y2="500" stroke="white" stroke-width="0.8"/><line x1="250" y1="0" x2="250" y2="500" stroke="white" stroke-width="0.8"/><line x1="300" y1="0" x2="300" y2="500" stroke="white" stroke-width="0.8"/><line x1="350" y1="0" x2="350" y2="500" stroke="white" stroke-width="0.8"/><line x1="400" y1="0" x2="400" y2="500" stroke="white" stroke-width="0.8"/><line x1="450" y1="0" x2="450" y2="500" stroke="white" stroke-width="0.8"/><line x1="0" y1="130" x2="500" y2="130" stroke="white" stroke-width="2"/><line x1="0" y1="360" x2="500" y2="360" stroke="white" stroke-width="2"/><polyline points="0,110 250,28 500,110" fill="none" stroke="white" stroke-width="2.5"/></svg>
-                </div>
-                <div class="absolute top-0 inset-x-0 h-1 bg-vb-orange"></div>
-                <div class="absolute inset-0 p-8 flex flex-col justify-end translate-y-0 group-hover:-translate-y-2 transition-transform duration-300">
-                    <span class="inline-block bg-vb-orange text-white text-xs font-bold px-3 py-1 uppercase tracking-widest mb-4 w-fit">Industrial</span>
-                    <h3 class="text-3xl font-black text-white mb-3">Standard Industrial<br>Warehouses</h3>
-                    <p class="text-slate-300 text-sm leading-relaxed mb-5">Vertical panel layouts with high-contrast trim options and heavy-duty corrugated roofing. Optimised for rapid logistics, cold storage, and large-footprint manufacturing. Clear spans of 12 m to 60 m+ available on request.</p>
-                    <div class="flex flex-wrap gap-2 mb-5"><span class="bg-white/10 text-white/80 text-xs px-3 py-1 rounded-full border border-white/20">Cold Storage Ready</span><span class="bg-white/10 text-white/80 text-xs px-3 py-1 rounded-full border border-white/20">Fire Class A</span><span class="bg-white/10 text-white/80 text-xs px-3 py-1 rounded-full border border-white/20">Large Clear Span</span></div>
-                    <a href="#quote" class="inline-flex items-center gap-2 text-vb-orange font-semibold text-sm group-hover:gap-3 transition-all">Start a Warehouse Project <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-                </div>
-            </div>
-            <div class="reveal group relative rounded overflow-hidden h-[500px] border border-slate-200 cursor-pointer">
-                <div class="absolute inset-0 bg-gradient-to-br from-slate-900 to-slate-800">
-                    <svg class="absolute inset-0 w-full h-full opacity-[0.18]" viewBox="0 0 500 500" preserveAspectRatio="none"><line x1="0" y1="65" x2="500" y2="65" stroke="white" stroke-width="1.5"/><line x1="0" y1="130" x2="500" y2="130" stroke="white" stroke-width="1.5"/><line x1="0" y1="195" x2="500" y2="195" stroke="white" stroke-width="1.5"/><line x1="0" y1="260" x2="500" y2="260" stroke="white" stroke-width="1.5"/><line x1="0" y1="325" x2="500" y2="325" stroke="white" stroke-width="1.5"/><line x1="0" y1="390" x2="500" y2="390" stroke="white" stroke-width="1.5"/><line x1="0" y1="455" x2="500" y2="455" stroke="white" stroke-width="1.5"/><line x1="95" y1="0" x2="95" y2="500" stroke="white" stroke-width="3"/><line x1="405" y1="0" x2="405" y2="500" stroke="white" stroke-width="3"/><rect x="115" y="95" width="270" height="125" fill="white" opacity="0.12"/><rect x="115" y="265" width="270" height="80" fill="white" opacity="0.07"/></svg>
-                </div>
-                <div class="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-slate-400 via-white to-slate-400"></div>
-                <div class="absolute inset-0 p-8 flex flex-col justify-end translate-y-0 group-hover:-translate-y-2 transition-transform duration-300">
-                    <span class="inline-block bg-white/20 backdrop-blur-sm border border-white/30 text-white text-xs font-bold px-3 py-1 uppercase tracking-widest mb-4 w-fit">Commercial</span>
-                    <h3 class="text-3xl font-black text-white mb-3">Premium Commercial<br>Spaces</h3>
-                    <p class="text-slate-300 text-sm leading-relaxed mb-5">Modern horizontal panel profiles with sleek metallic RAL finishes. Architecturally refined systems for showrooms, retail parks, service centres, and premium office developments. Aesthetic precision without structural compromise.</p>
-                    <div class="flex flex-wrap gap-2 mb-5"><span class="bg-white/10 text-white/80 text-xs px-3 py-1 rounded-full border border-white/20">RAL Custom Finish</span><span class="bg-white/10 text-white/80 text-xs px-3 py-1 rounded-full border border-white/20">LEED Compatible</span><span class="bg-white/10 text-white/80 text-xs px-3 py-1 rounded-full border border-white/20">Architectural Grade</span></div>
-                    <a href="#quote" class="inline-flex items-center gap-2 text-slate-300 hover:text-white font-semibold text-sm group-hover:gap-3 transition-all">Start a Commercial Project <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
-                </div>
-            </div>
+        <div class="grid grid-cols-3 gap-6 max-w-sm pt-8 border-t border-white/10">
+            <div><div class="text-2xl font-black text-white">72სთ</div><div class="text-xs text-slate-400 mt-0.5 uppercase tracking-wide">ფასი</div></div>
+            <div><div class="text-2xl font-black text-white">50+</div><div class="text-xs text-slate-400 mt-0.5 uppercase tracking-wide">პროექტი</div></div>
+            <div><div class="text-2xl font-black text-white">EU</div><div class="text-xs text-slate-400 mt-0.5 uppercase tracking-wide">მასალა</div></div>
         </div>
     </div>
 </section>
 
-<section id="products" class="py-24 bg-slate-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="mb-14 reveal">
-            <div class="flex items-center gap-3 mb-3"><div class="h-px w-10 bg-vb-orange"></div><span class="text-xs font-bold text-vb-orange uppercase tracking-[.15em]">Product Range</span></div>
-            <h2 class="text-4xl lg:text-5xl font-black text-vb-navy mb-4">Everything<br>in One Package</h2>
-            <p class="text-lg text-slate-500 max-w-2xl">A Velocity Build kit is a single coordinated procurement. Every component is specified, sourced, and matched to your structure — eliminating interface errors and procurement delays between trades.</p>
+<!-- PROJECTS -->
+<section id="projects" class="py-20 bg-slate-50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="mb-12">
+            <div class="flex items-center gap-3 mb-2"><div class="h-px w-8 bg-orange"></div><span class="text-xs font-bold text-orange uppercase tracking-widest">პროექტები</span></div>
+            <h2 class="text-3xl lg:text-4xl font-black text-navy">ჩვენი შენობები</h2>
         </div>
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="reveal bg-white rounded border border-slate-200 p-6 hover:border-vb-navy hover:shadow-xl hover:shadow-slate-100/80 transition-all duration-200 group">
-                <div class="w-12 h-12 bg-vb-navy/10 rounded flex items-center justify-center mb-5 group-hover:bg-vb-navy transition-colors duration-200"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="1.8" stroke-linecap="round" class="group-hover:[stroke:#fff] transition-colors"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="18" rx="1"/><line x1="10" y1="8" x2="14" y2="8"/><line x1="10" y1="13" x2="14" y2="13"/><line x1="10" y1="18" x2="14" y2="18"/></svg></div>
-                <h3 class="text-base font-bold text-vb-navy mb-2">Wall Panels</h3>
-                <p class="text-sm text-slate-500 leading-relaxed mb-4">High-density PIR/PUR and Rockwool insulation cores. 40 mm to 200 mm thickness. Precision-formed steel facings with concealed or visible fastener profiles.</p>
-                <ul class="space-y-1.5"><li class="flex items-center gap-2 text-xs text-slate-600"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>PIR / PUR / Rockwool cores</li><li class="flex items-center gap-2 text-xs text-slate-600"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>U-values to 0.10 W/m²K</li><li class="flex items-center gap-2 text-xs text-slate-600"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Full RAL colour range</li><li class="flex items-center gap-2 text-xs text-slate-600"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Fire Class B-s1, d0 rated</li></ul>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="img-box rounded overflow-hidden h-56 lg:h-64">
+                <img src="https://images.pexels.com/photos/32212309/pexels-photo-32212309/free-photo-of-industrial-warehouse-exterior-at-suyama-lumber-co.jpeg?auto=compress&cs=tinysrgb&w=800" alt="სამრეწველო საწყობი"/>
+                <div class="absolute inset-0 flex items-end p-3 bg-gradient-to-t from-black/60 to-transparent"><span class="text-white text-xs font-semibold">სამრეწველო საწყობი</span></div>
             </div>
-            <div class="reveal bg-white rounded border border-slate-200 p-6 hover:border-vb-navy hover:shadow-xl hover:shadow-slate-100/80 transition-all duration-200 group">
-                <div class="w-12 h-12 bg-vb-navy/10 rounded flex items-center justify-center mb-5 group-hover:bg-vb-navy transition-colors duration-200"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="group-hover:[stroke:#fff] transition-colors"><polyline points="3 9 12 2 21 9"/><path d="M9 22V12h6v10"/><line x1="3" y1="9" x2="3" y2="22"/><line x1="21" y1="9" x2="21" y2="22"/></svg></div>
-                <h3 class="text-base font-bold text-vb-navy mb-2">Roof Panels</h3>
-                <p class="text-sm text-slate-500 leading-relaxed mb-4">Corrugated and standing-seam structural profiles with integrated thermal breaks. Engineered for snow, wind, and dynamic loads. Leak-proof panel-to-panel joints.</p>
-                <ul class="space-y-1.5"><li class="flex items-center gap-2 text-xs text-slate-600"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Standing seam profiles</li><li class="flex items-center gap-2 text-xs text-slate-600"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Integrated thermal break</li><li class="flex items-center gap-2 text-xs text-slate-600"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Snow load to 3.0 kN/m²</li><li class="flex items-center gap-2 text-xs text-slate-600"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Min 3° pitch compatible</li></ul>
+            <div class="img-box rounded overflow-hidden h-56 lg:h-64">
+                <img src="https://images.pexels.com/photos/13261149/pexels-photo-13261149.jpeg?auto=compress&cs=tinysrgb&w=800" alt="ფოლადის კარკასი მშენებლობაში"/>
+                <div class="absolute inset-0 flex items-end p-3 bg-gradient-to-t from-black/60 to-transparent"><span class="text-white text-xs font-semibold">ფოლადის კარკასი</span></div>
             </div>
-            <div class="reveal bg-white rounded border border-slate-200 p-6 hover:border-vb-navy hover:shadow-xl hover:shadow-slate-100/80 transition-all duration-200 group">
-                <div class="w-12 h-12 bg-vb-navy/10 rounded flex items-center justify-center mb-5 group-hover:bg-vb-navy transition-colors duration-200"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="group-hover:[stroke:#fff] transition-colors"><rect x="2" y="7" width="20" height="4" rx="1"/><rect x="5" y="3" width="14" height="4" rx="1"/><rect x="5" y="17" width="14" height="4" rx="1"/><line x1="12" y1="11" x2="12" y2="17"/></svg></div>
-                <h3 class="text-base font-bold text-vb-navy mb-2">Structural Steel &amp; Frameworks</h3>
-                <p class="text-sm text-slate-500 leading-relaxed mb-4">Hot-rolled primary columns and rafters, cold-formed secondary purlins and girts. Pre-punched, galvanised, delivered with full connection hardware.</p>
-                <ul class="space-y-1.5"><li class="flex items-center gap-2 text-xs text-slate-600"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>S355 hot-rolled sections</li><li class="flex items-center gap-2 text-xs text-slate-600"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Pre-drilled &amp; part-matched</li><li class="flex items-center gap-2 text-xs text-slate-600"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Z/C purlins included</li><li class="flex items-center gap-2 text-xs text-slate-600"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>EC3 / AISC compliant</li></ul>
+            <div class="img-box rounded overflow-hidden h-56 lg:h-64">
+                <img src="https://images.pexels.com/photos/30762654/pexels-photo-30762654/free-photo-of-modern-industrial-building-in-a-rural-landscape.jpeg?auto=compress&cs=tinysrgb&w=800" alt="თანამედროვე სამრეწველო შენობა"/>
+                <div class="absolute inset-0 flex items-end p-3 bg-gradient-to-t from-black/60 to-transparent"><span class="text-white text-xs font-semibold">სამრეწველო კომპლექსი</span></div>
             </div>
-            <div class="reveal bg-white rounded border border-slate-200 p-6 hover:border-vb-navy hover:shadow-xl hover:shadow-slate-100/80 transition-all duration-200 group">
-                <div class="w-12 h-12 bg-vb-navy/10 rounded flex items-center justify-center mb-5 group-hover:bg-vb-navy transition-colors duration-200"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="group-hover:[stroke:#fff] transition-colors"><path d="M12 22V8"/><path d="m20 12-8-4-8 4"/><path d="m20 17-8 5-8-5"/><path d="m20 7-8 5-8-5"/></svg></div>
-                <h3 class="text-base font-bold text-vb-navy mb-2">Completing Elements</h3>
-                <p class="text-sm text-slate-500 leading-relaxed mb-4">Colour-matched ridge caps, corner trims, parapet flashings, window/door surrounds, and structural hex-head fasteners. Nothing missing on delivery day.</p>
-                <ul class="space-y-1.5"><li class="flex items-center gap-2 text-xs text-slate-600"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>RAL-matched flashings</li><li class="flex items-center gap-2 text-xs text-slate-600"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Structural hex fasteners</li><li class="flex items-center gap-2 text-xs text-slate-600"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Ridge &amp; valley caps</li><li class="flex items-center gap-2 text-xs text-slate-600"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Sealants &amp; closures</li></ul>
+            <div class="img-box rounded overflow-hidden h-56 lg:h-64">
+                <img src="https://images.pexels.com/photos/18289258/pexels-photo-18289258/free-photo-of-building-out-of-corrugated-metal.jpeg?auto=compress&cs=tinysrgb&w=800" alt="კორუგირებული ლითონის შენობა"/>
+                <div class="absolute inset-0 flex items-end p-3 bg-gradient-to-t from-black/60 to-transparent"><span class="text-white text-xs font-semibold">კომერციული შენობა</span></div>
+            </div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6 mt-8">
+            <div class="bg-white border border-slate-200 rounded p-6 hover:border-navy hover:shadow-lg transition-all">
+                <span class="inline-block bg-orange text-white text-xs font-bold px-3 py-1 rounded uppercase tracking-wider mb-3">სამრეწველო</span>
+                <h3 class="text-xl font-black text-navy mb-2">სამრეწველო საწყობები</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">ვერტიკალური პანელების განლაგება, მძიმე გადახურვა, 12–60+ მ სიგანე. შესაფერისი ლოჯისტიკისა და წარმოებისთვის.</p>
+                <div class="flex flex-wrap gap-2 mt-4">
+                    <span class="bg-slate-100 text-slate-600 text-xs px-2.5 py-1 rounded-full">ცივი საწყობი</span>
+                    <span class="bg-slate-100 text-slate-600 text-xs px-2.5 py-1 rounded-full">A კლასი — ხანძარი</span>
+                    <span class="bg-slate-100 text-slate-600 text-xs px-2.5 py-1 rounded-full">დიდი სიგანე</span>
+                </div>
+            </div>
+            <div class="bg-white border border-slate-200 rounded p-6 hover:border-navy hover:shadow-lg transition-all">
+                <span class="inline-block bg-slate-700 text-white text-xs font-bold px-3 py-1 rounded uppercase tracking-wider mb-3">კომერციული</span>
+                <h3 class="text-xl font-black text-navy mb-2">კომერციული სივრცეები</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">ჰორიზონტალური პანელები, RAL ფერები, მეტალური ფინიში. შოუ-რუმები, სავაჭრო ცენტრები, ოფისები.</p>
+                <div class="flex flex-wrap gap-2 mt-4">
+                    <span class="bg-slate-100 text-slate-600 text-xs px-2.5 py-1 rounded-full">RAL ფერი</span>
+                    <span class="bg-slate-100 text-slate-600 text-xs px-2.5 py-1 rounded-full">LEED</span>
+                    <span class="bg-slate-100 text-slate-600 text-xs px-2.5 py-1 rounded-full">არქიტექტურული</span>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<section id="advantages" class="py-24 bg-vb-navy relative overflow-hidden">
-    <div class="absolute inset-0 grid-lines opacity-25"></div>
-    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="mb-16 text-center reveal">
-            <div class="flex items-center justify-center gap-3 mb-3"><div class="h-px w-10 bg-vb-orange"></div><span class="text-xs font-bold text-vb-orange uppercase tracking-[.15em]">Technical Advantages</span><div class="h-px w-10 bg-vb-orange"></div></div>
-            <h2 class="text-4xl lg:text-5xl font-black text-white mb-4">Why Velocity Build?</h2>
-            <p class="text-lg text-slate-400 max-w-xl mx-auto">Three non-negotiable pillars that every project is measured against.</p>
+<!-- PRODUCTS -->
+<section id="products" class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="mb-12">
+            <div class="flex items-center gap-3 mb-2"><div class="h-px w-8 bg-orange"></div><span class="text-xs font-bold text-orange uppercase tracking-widest">პროდუქტები</span></div>
+            <h2 class="text-3xl lg:text-4xl font-black text-navy mb-3">ყველაფერი ერთ პაკეტში</h2>
+            <p class="text-slate-500 max-w-xl">ერთი შეკვეთა — ყველა კომპონენტი. პანელები, კარკასი, სამაგრები — ყველაფერი შეთანხმებული და მზად.</p>
         </div>
-        <div class="grid md:grid-cols-3 gap-7">
-            <div class="reveal bg-white/5 border border-white/10 rounded p-8 hover:bg-white/10 hover:border-vb-orange/40 transition-all duration-200 group">
-                <div class="w-14 h-14 bg-vb-orange/20 rounded flex items-center justify-center mb-6 group-hover:bg-vb-orange transition-colors duration-200"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="group-hover:[stroke:#fff] transition-colors"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
-                <h3 class="text-xl font-bold text-white mb-3">Global Material Sourcing</h3>
-                <p class="text-slate-400 leading-relaxed text-sm mb-6">We source exclusively from certified EU and international steel mills and insulation manufacturers. Every batch carries mill test certificates, CE marking, and third-party fire-test documentation — no compromise on provenance.</p>
-                <ul class="space-y-2"><li class="flex items-center gap-3 text-sm text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-vb-orange flex-shrink-0"></span>CE &amp; ETA certified products</li><li class="flex items-center gap-3 text-sm text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-vb-orange flex-shrink-0"></span>Full mill test certificates</li><li class="flex items-center gap-3 text-sm text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-vb-orange flex-shrink-0"></span>Traceability on every panel</li></ul>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div class="border border-slate-200 rounded p-5 hover:border-navy hover:shadow-lg transition-all group">
+                <div class="w-10 h-10 bg-navy/10 rounded flex items-center justify-center mb-4 group-hover:bg-navy transition-colors">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2" stroke-linecap="round" class="group-hover:[stroke:#fff]"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="18" rx="1"/><line x1="10" y1="8" x2="14" y2="8"/><line x1="10" y1="13" x2="14" y2="13"/></svg>
+                </div>
+                <h3 class="font-bold text-navy mb-2">კედლის პანელები</h3>
+                <p class="text-xs text-slate-500 leading-relaxed mb-3">PIR/PUR და Rockwool გამავსებელი. 40–200 მმ სისქე. U-მნიშვნელობა 0.10 W/m²K.</p>
+                <ul class="space-y-1 text-xs text-slate-600">
+                    <li class="flex gap-2"><span class="text-orange font-bold">✓</span> PIR / PUR / Rockwool</li>
+                    <li class="flex gap-2"><span class="text-orange font-bold">✓</span> სრული RAL ფერები</li>
+                    <li class="flex gap-2"><span class="text-orange font-bold">✓</span> B-s1, d0 ხანძარი</li>
+                </ul>
             </div>
-            <div class="reveal bg-white/5 border border-white/10 rounded p-8 hover:bg-white/10 hover:border-vb-orange/40 transition-all duration-200 group">
-                <div class="w-14 h-14 bg-vb-orange/20 rounded flex items-center justify-center mb-6 group-hover:bg-vb-orange transition-colors duration-200"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="group-hover:[stroke:#fff] transition-colors"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10"/><path d="M12 6v6l4 2"/><path d="M18 2v4h4"/><path d="M22 2l-5 5"/></svg></div>
-                <h3 class="text-xl font-bold text-white mb-3">Exceptional Thermal &amp; Fire Resistance</h3>
-                <p class="text-slate-400 leading-relaxed text-sm mb-6">Rockwool-core panels achieve REI 60/120 fire resistance ratings. PIR cores reach U-values down to 0.10 W/m²K — cutting operational heating and cooling costs by up to 40% versus traditional masonry envelope systems.</p>
-                <ul class="space-y-2"><li class="flex items-center gap-3 text-sm text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-vb-orange flex-shrink-0"></span>REI 60 / REI 120 fire rated</li><li class="flex items-center gap-3 text-sm text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-vb-orange flex-shrink-0"></span>U-value to 0.10 W/m²K</li><li class="flex items-center gap-3 text-sm text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-vb-orange flex-shrink-0"></span>Up to 40% energy cost reduction</li></ul>
+            <div class="border border-slate-200 rounded p-5 hover:border-navy hover:shadow-lg transition-all group">
+                <div class="w-10 h-10 bg-navy/10 rounded flex items-center justify-center mb-4 group-hover:bg-navy transition-colors">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:[stroke:#fff]"><polyline points="3 9 12 2 21 9"/><path d="M9 22V12h6v10"/><line x1="3" y1="9" x2="3" y2="22"/><line x1="21" y1="9" x2="21" y2="22"/></svg>
+                </div>
+                <h3 class="font-bold text-navy mb-2">სახურავის პანელები</h3>
+                <p class="text-xs text-slate-500 leading-relaxed mb-3">კორუგირებული და standing-seam პროფილი. თბური გამოყოფა. წყალგაუმტარი.</p>
+                <ul class="space-y-1 text-xs text-slate-600">
+                    <li class="flex gap-2"><span class="text-orange font-bold">✓</span> Standing seam</li>
+                    <li class="flex gap-2"><span class="text-orange font-bold">✓</span> თოვლის დატვირთვა 3.0 kN</li>
+                    <li class="flex gap-2"><span class="text-orange font-bold">✓</span> მინ. დახრა 3°</li>
+                </ul>
             </div>
-            <div class="reveal bg-white/5 border border-white/10 rounded p-8 hover:bg-white/10 hover:border-vb-orange/40 transition-all duration-200 group">
-                <div class="w-14 h-14 bg-vb-orange/20 rounded flex items-center justify-center mb-6 group-hover:bg-vb-orange transition-colors duration-200"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="group-hover:[stroke:#fff] transition-colors"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                <h3 class="text-xl font-bold text-white mb-3">Drastic Labour Savings</h3>
-                <p class="text-slate-400 leading-relaxed text-sm mb-6">Pre-engineered lock-together panel systems require no specialist masonry trades. A 1,000 m² structure can be fully enclosed in under 5 working days with a small erection crew — dramatically reducing program duration and on-site labour costs.</p>
-                <ul class="space-y-2"><li class="flex items-center gap-3 text-sm text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-vb-orange flex-shrink-0"></span>No masonry trades required</li><li class="flex items-center gap-3 text-sm text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-vb-orange flex-shrink-0"></span>1,000 m² enclosed in &lt;5 days</li><li class="flex items-center gap-3 text-sm text-slate-300"><span class="w-1.5 h-1.5 rounded-full bg-vb-orange flex-shrink-0"></span>Full erection manuals provided</li></ul>
+            <div class="border border-slate-200 rounded p-5 hover:border-navy hover:shadow-lg transition-all group">
+                <div class="w-10 h-10 bg-navy/10 rounded flex items-center justify-center mb-4 group-hover:bg-navy transition-colors">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:[stroke:#fff]"><rect x="2" y="7" width="20" height="4" rx="1"/><rect x="5" y="3" width="14" height="4" rx="1"/><rect x="5" y="17" width="14" height="4" rx="1"/><line x1="12" y1="11" x2="12" y2="17"/></svg>
+                </div>
+                <h3 class="font-bold text-navy mb-2">ფოლადის კარკასი</h3>
+                <p class="text-xs text-slate-500 leading-relaxed mb-3">S355 ცხელად ნაგლინი სვეტები. ცივად ნაგლინი პურლინები. წინასწარ ნახვრეტებული.</p>
+                <ul class="space-y-1 text-xs text-slate-600">
+                    <li class="flex gap-2"><span class="text-orange font-bold">✓</span> S355 ფოლადი</li>
+                    <li class="flex gap-2"><span class="text-orange font-bold">✓</span> Z/C პურლინები</li>
+                    <li class="flex gap-2"><span class="text-orange font-bold">✓</span> EC3 სტანდარტი</li>
+                </ul>
+            </div>
+            <div class="border border-slate-200 rounded p-5 hover:border-navy hover:shadow-lg transition-all group">
+                <div class="w-10 h-10 bg-navy/10 rounded flex items-center justify-center mb-4 group-hover:bg-navy transition-colors">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:[stroke:#fff]"><path d="M12 22V8"/><path d="m20 12-8-4-8 4"/><path d="m20 17-8 5-8-5"/></svg>
+                </div>
+                <h3 class="font-bold text-navy mb-2">სამაგრი ელემენტები</h3>
+                <p class="text-xs text-slate-500 leading-relaxed mb-3">RAL შეფერილი ფლეშინგები, კუთხეები, ყდე-ორომტრიალი, სახურავის ქედი.</p>
+                <ul class="space-y-1 text-xs text-slate-600">
+                    <li class="flex gap-2"><span class="text-orange font-bold">✓</span> RAL ფლეშინგები</li>
+                    <li class="flex gap-2"><span class="text-orange font-bold">✓</span> ბოლტები და სამაგრები</li>
+                    <li class="flex gap-2"><span class="text-orange font-bold">✓</span> დასრულება სრულად</li>
+                </ul>
             </div>
         </div>
     </div>
 </section>
 
-<section id="quote" class="py-24 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid lg:grid-cols-2 gap-16 items-start">
-            <div class="reveal">
-                <div class="flex items-center gap-3 mb-3"><div class="h-px w-10 bg-vb-orange"></div><span class="text-xs font-bold text-vb-orange uppercase tracking-[.15em]">Get a Quote</span></div>
-                <h2 class="text-4xl lg:text-5xl font-black text-vb-navy mb-6">Start Your<br>Project Today.</h2>
-                <p class="text-lg text-slate-500 leading-relaxed mb-10">Tell us the basics. Our engineering team reviews your requirements and returns a detailed preliminary quotation within 72 hours — panel specifications, structural assumptions, and indicative pricing included.</p>
-                <div class="space-y-5 mb-10">
-                    <div class="flex items-start gap-4"><div class="w-8 h-8 bg-vb-orange text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 mt-0.5">1</div><div><div class="font-semibold text-vb-navy">Submit Your Requirements</div><div class="text-sm text-slate-500">Basic dimensions, location, and package type</div></div></div>
-                    <div class="flex items-start gap-4"><div class="w-8 h-8 bg-vb-orange text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 mt-0.5">2</div><div><div class="font-semibold text-vb-navy">Engineering Review</div><div class="text-sm text-slate-500">Panel spec and structural assumptions prepared by our team</div></div></div>
-                    <div class="flex items-start gap-4"><div class="w-8 h-8 bg-vb-orange text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 mt-0.5">3</div><div><div class="font-semibold text-vb-navy">Quotation Within 72 Hours</div><div class="text-sm text-slate-500">Detailed preliminary quote with indicative pricing</div></div></div>
+<!-- WHY US -->
+<section id="why" class="py-20 bg-navy">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="mb-12 text-center">
+            <div class="flex items-center justify-center gap-3 mb-2"><div class="h-px w-8 bg-orange"></div><span class="text-xs font-bold text-orange uppercase tracking-widest">უპირატესობები</span><div class="h-px w-8 bg-orange"></div></div>
+            <h2 class="text-3xl lg:text-4xl font-black text-white">რატომ Velocity Build?</h2>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="bg-white/5 border border-white/10 rounded p-6 hover:bg-white/10 transition-all group">
+                <div class="w-12 h-12 bg-orange/20 rounded flex items-center justify-center mb-5 group-hover:bg-orange transition-colors">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="1.8" stroke-linecap="round" class="group-hover:[stroke:#fff]"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
                 </div>
-                <div class="p-5 bg-slate-50 border border-slate-200 rounded">
-                    <div class="text-sm font-semibold text-vb-navy mb-3">Prefer to speak directly?</div>
-                    <div class="flex flex-col gap-2.5">
-                        <a href="tel:+18000000000" class="flex items-center gap-3 text-sm text-slate-600 hover:text-vb-navy transition-colors"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>+1 (800) 000-0000</a>
-                        <a href="mailto:projects@velocitybuild.com" class="flex items-center gap-3 text-sm text-slate-600 hover:text-vb-navy transition-colors"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>projects@velocitybuild.com</a>
-                    </div>
+                <h3 class="text-lg font-bold text-white mb-2">გლობალური მასალები</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">ევროპული სტანდარტის ქარხნებიდან. CE სერთიფიკატი, ქარხნული ტესტები, სრული თვალყური.</p>
+            </div>
+            <div class="bg-white/5 border border-white/10 rounded p-6 hover:bg-white/10 transition-all group">
+                <div class="w-12 h-12 bg-orange/20 rounded flex items-center justify-center mb-5 group-hover:bg-orange transition-colors">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="1.8" stroke-linecap="round" class="group-hover:[stroke:#fff]"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">სწრაფი მონტაჟი</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">1 000 მ² შენობა 5 სამუშაო დღეში. სპეციალიზებული ოსტატები არ სჭირდება. სრული მონტაჟის სახელმძღვანელო.</p>
+            </div>
+            <div class="bg-white/5 border border-white/10 rounded p-6 hover:bg-white/10 transition-all group">
+                <div class="w-12 h-12 bg-orange/20 rounded flex items-center justify-center mb-5 group-hover:bg-orange transition-colors">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="1.8" stroke-linecap="round" class="group-hover:[stroke:#fff]"><path d="M12 22a9 9 0 0 1-9-9c0-4.97 9-13 9-13s9 8.03 9 13a9 9 0 0 1-9 9z"/></svg>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">თბო და ხანძარმედეგობა</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">REI 60/120 ხანძარმდგრადობა. U-მნიშვნელობა 0.10 W/m²K. 40%-მდე ენერგიის დაზოგვა.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- QUOTE -->
+<section id="quote" class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="grid lg:grid-cols-2 gap-14 items-start">
+            <div>
+                <div class="flex items-center gap-3 mb-2"><div class="h-px w-8 bg-orange"></div><span class="text-xs font-bold text-orange uppercase tracking-widest">ფასი</span></div>
+                <h2 class="text-3xl lg:text-4xl font-black text-navy mb-4">ფასი 72 საათში</h2>
+                <p class="text-slate-500 leading-relaxed mb-8">შეავსე ფორმა. ჩვენი გუნდი განიხილავს შენი პროექტის მოთხოვნებს და 72 საათში გამოგიგზავნის დეტალურ პრელიმინარულ ფასს.</p>
+                <div class="space-y-4 mb-8">
+                    <div class="flex gap-3"><div class="w-7 h-7 bg-orange text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">1</div><div><div class="font-semibold text-navy text-sm">მოთხოვნის გაგზავნა</div><div class="text-xs text-slate-500">ზომები, მდებარეობა, პაკეტის ტიპი</div></div></div>
+                    <div class="flex gap-3"><div class="w-7 h-7 bg-orange text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">2</div><div><div class="font-semibold text-navy text-sm">ინჟინრების მიმოხილვა</div><div class="text-xs text-slate-500">პანელების სპეციფიკაცია და კარკასის გაანგარიშება</div></div></div>
+                    <div class="flex gap-3"><div class="w-7 h-7 bg-orange text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">3</div><div><div class="font-semibold text-navy text-sm">ფასი 72 საათში</div><div class="text-xs text-slate-500">დეტალური შეთავაზება ფასებით</div></div></div>
+                </div>
+                <div class="bg-slate-50 border border-slate-200 rounded p-4">
+                    <div class="text-sm font-semibold text-navy mb-2">პირდაპირ დაგვიკავშირდით:</div>
+                    <a href="tel:+18000000000" class="flex items-center gap-2 text-sm text-slate-600 hover:text-navy mb-1.5"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>+1 (800) 000-0000</a>
+                    <a href="mailto:info@velocitybuild.com" class="flex items-center gap-2 text-sm text-slate-600 hover:text-navy"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>info@velocitybuild.com</a>
                 </div>
             </div>
-            <div class="reveal bg-white border border-slate-200 rounded shadow-2xl shadow-slate-100 p-8">
-                <h3 class="text-xl font-bold text-vb-navy mb-6">Project Enquiry Form</h3>
-                <form id="quote-form" class="space-y-5" onsubmit="handleQuoteSubmit(event)" novalidate>
+            <div class="bg-white border border-slate-200 rounded shadow-xl shadow-slate-100 p-7">
+                <h3 class="text-lg font-bold text-navy mb-5">პროექტის ფორმა</h3>
+                <form id="quote-form" class="space-y-4" onsubmit="handleSubmit(event)" novalidate>
                     <div class="grid sm:grid-cols-2 gap-4">
-                        <div><label class="block text-xs font-semibold text-slate-500 uppercase tracking-widest mb-1.5">Full Name *</label><input type="text" required placeholder="John Smith" class="vb-input w-full border border-slate-300 rounded px-4 py-3 text-sm text-slate-800 placeholder-slate-400 transition-all hover:border-slate-400"/></div>
-                        <div><label class="block text-xs font-semibold text-slate-500 uppercase tracking-widest mb-1.5">Company Name *</label><input type="text" required placeholder="Acme Developments Ltd." class="vb-input w-full border border-slate-300 rounded px-4 py-3 text-sm text-slate-800 placeholder-slate-400 transition-all hover:border-slate-400"/></div>
+                        <div><label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">სახელი *</label><input type="text" required placeholder="გიორგი ბერიძე" class="vb-input w-full border border-slate-300 rounded px-3.5 py-2.5 text-sm placeholder-slate-400 hover:border-slate-400 transition-all"/></div>
+                        <div><label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">კომპანია *</label><input type="text" required placeholder="შპს კომპანია" class="vb-input w-full border border-slate-300 rounded px-3.5 py-2.5 text-sm placeholder-slate-400 hover:border-slate-400 transition-all"/></div>
                     </div>
-                    <div><label class="block text-xs font-semibold text-slate-500 uppercase tracking-widest mb-1.5">Project Location *</label><input type="text" required placeholder="City, Country / Region" class="vb-input w-full border border-slate-300 rounded px-4 py-3 text-sm text-slate-800 placeholder-slate-400 transition-all hover:border-slate-400"/></div>
-                    <div><label class="block text-xs font-semibold text-slate-500 uppercase tracking-widest mb-1.5">Estimated Building Area (m²) *</label><input type="number" required placeholder="e.g. 2500" min="50" class="vb-input w-full border border-slate-300 rounded px-4 py-3 text-sm text-slate-800 placeholder-slate-400 transition-all hover:border-slate-400"/></div>
+                    <div><label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">მდებარეობა *</label><input type="text" required placeholder="თბილისი, საქართველო" class="vb-input w-full border border-slate-300 rounded px-3.5 py-2.5 text-sm placeholder-slate-400 hover:border-slate-400 transition-all"/></div>
+                    <div><label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">ფართობი (მ²) *</label><input type="number" required placeholder="მაგ. 1500" min="50" class="vb-input w-full border border-slate-300 rounded px-3.5 py-2.5 text-sm placeholder-slate-400 hover:border-slate-400 transition-all"/></div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2">Package Type *</label>
+                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">პაკეტის ტიპი *</label>
                         <div class="grid grid-cols-2 gap-3">
-                            <div class="pkg-card" onclick="selectPkg(this, 'panel-supply')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="1.8" stroke-linecap="round" class="mx-auto mb-2"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="18" rx="1"/></svg><div class="text-xs font-bold text-slate-700">Panel Supply Only</div><div class="text-xs text-slate-400 mt-0.5">Panels + fixings</div></div>
-                            <div class="pkg-card active" onclick="selectPkg(this, 'full-structure')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><div class="text-xs font-bold text-vb-navy">Full Structure Package</div><div class="text-xs text-slate-400 mt-0.5">Steel + panels + all components</div></div>
+                            <div class="pkg-card" onclick="selectPkg(this,'panels')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="1.8" stroke-linecap="round" class="mx-auto mb-1.5"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="18" rx="1"/></svg><div class="text-xs font-bold text-slate-700">პანელები მარტო</div><div class="text-xs text-slate-400">პანელი + სამაგრები</div></div>
+                            <div class="pkg-card active" onclick="selectPkg(this,'full')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><div class="text-xs font-bold text-navy">სრული პაკეტი</div><div class="text-xs text-slate-400">კარკასი + ყველაფერი</div></div>
                         </div>
-                        <input type="hidden" id="pkg-value" value="full-structure"/>
+                        <input type="hidden" id="pkg-val" value="full"/>
                     </div>
-                    <div><label class="block text-xs font-semibold text-slate-500 uppercase tracking-widest mb-1.5">Project Notes (Optional)</label><textarea rows="3" placeholder="Eave height, special loads, insulation requirements, access constraints..." class="vb-input w-full border border-slate-300 rounded px-4 py-3 text-sm text-slate-800 placeholder-slate-400 transition-all hover:border-slate-400 resize-none"></textarea></div>
-                    <button type="submit" class="w-full bg-vb-orange hover:bg-orange-600 text-white font-bold py-4 px-6 rounded transition-all duration-200 hover:-translate-y-px hover:shadow-xl hover:shadow-orange-200 flex items-center justify-center gap-2">Request My 72-Hour Quote <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
-                    <p class="text-xs text-slate-400 text-center">By submitting you agree to our Privacy Policy. We never share your details with third parties.</p>
+                    <div><label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">შენიშვნა</label><textarea rows="2" placeholder="სიმაღლე, სპეციალური მოთხოვნები..." class="vb-input w-full border border-slate-300 rounded px-3.5 py-2.5 text-sm placeholder-slate-400 hover:border-slate-400 transition-all resize-none"></textarea></div>
+                    <button type="submit" class="w-full bg-orange hover:bg-orange-600 text-white font-bold py-3.5 rounded transition-all hover:-translate-y-px hover:shadow-lg flex items-center justify-center gap-2">ფასი მოვითხოვ — 72 საათში <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+                    <p class="text-xs text-slate-400 text-center">მონაცემები კონფიდენციალურია. მესამე მხარეს არ გადაეცემა.</p>
                 </form>
-                <div id="form-success" class="hidden text-center py-10">
-                    <div class="w-16 h-16 bg-green-50 border border-green-200 rounded-full flex items-center justify-center mx-auto mb-4"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-                    <h4 class="text-xl font-bold text-vb-navy mb-2">Enquiry Submitted!</h4>
-                    <p class="text-sm text-slate-500 max-w-xs mx-auto">Our engineering team will review your project and respond with a detailed quote within 72 hours.</p>
+                <div id="form-success" class="hidden text-center py-8">
+                    <div class="w-14 h-14 bg-green-50 border border-green-200 rounded-full flex items-center justify-center mx-auto mb-3"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+                    <h4 class="text-lg font-bold text-navy mb-1">გაგზავნილია!</h4>
+                    <p class="text-sm text-slate-500">72 საათში მოგვწერთ დეტალური ფასით.</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<footer class="bg-vb-ink text-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+<!-- FOOTER -->
+<footer class="bg-ink text-white py-10">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
             <div class="sm:col-span-2 lg:col-span-1">
-                <div class="flex items-center gap-2.5 mb-4"><div class="w-8 h-8 bg-vb-navy rounded flex items-center justify-center"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span class="text-lg font-black tracking-tight">Velocity<span class="text-vb-orange">Build</span></span></div>
-                <p class="text-sm text-slate-400 leading-relaxed mb-5">Rapid Construction. Premium Insulation.<br>Supplying complete building envelopes —<br>from steel frame to final flashing.</p>
-                <div class="flex gap-2.5"><a href="#" aria-label="LinkedIn" class="w-9 h-9 bg-white/10 hover:bg-vb-orange rounded flex items-center justify-center transition-colors"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a><a href="#" aria-label="Twitter" class="w-9 h-9 bg-white/10 hover:bg-vb-orange rounded flex items-center justify-center transition-colors"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a></div>
+                <div class="flex items-center gap-2 mb-3"><div class="w-7 h-7 bg-navy rounded flex items-center justify-center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span class="font-black">Velocity<span class="text-orange">Build</span></span></div>
+                <p class="text-sm text-slate-400">სწრაფი მშენებლობა. პრემიუმ იზოლაცია.</p>
             </div>
-            <div><h4 class="text-xs font-bold uppercase tracking-widest text-white mb-5">Solutions</h4><ul class="space-y-2.5"><li><a href="#solutions" class="text-sm text-slate-400 hover:text-vb-orange transition-colors">Industrial Warehouses</a></li><li><a href="#solutions" class="text-sm text-slate-400 hover:text-vb-orange transition-colors">Premium Commercial Spaces</a></li><li><a href="#" class="text-sm text-slate-400 hover:text-vb-orange transition-colors">Cold Storage Facilities</a></li><li><a href="#" class="text-sm text-slate-400 hover:text-vb-orange transition-colors">Agricultural Buildings</a></li><li><a href="#" class="text-sm text-slate-400 hover:text-vb-orange transition-colors">Sports &amp; Recreational</a></li></ul></div>
-            <div><h4 class="text-xs font-bold uppercase tracking-widest text-white mb-5">Products</h4><ul class="space-y-2.5"><li><a href="#products" class="text-sm text-slate-400 hover:text-vb-orange transition-colors">PIR / PUR Wall Panels</a></li><li><a href="#products" class="text-sm text-slate-400 hover:text-vb-orange transition-colors">Rockwool Fire Panels</a></li><li><a href="#products" class="text-sm text-slate-400 hover:text-vb-orange transition-colors">Roof Panels &amp; Profiles</a></li><li><a href="#products" class="text-sm text-slate-400 hover:text-vb-orange transition-colors">Steel Frameworks</a></li><li><a href="#products" class="text-sm text-slate-400 hover:text-vb-orange transition-colors">Flashings &amp; Fixings</a></li></ul></div>
-            <div><h4 class="text-xs font-bold uppercase tracking-widest text-white mb-5">Contact</h4><ul class="space-y-4"><li class="flex items-start gap-3"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0 mt-0.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span class="text-sm text-slate-400">+1 (800) 000-0000</span></li><li class="flex items-start gap-3"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0 mt-0.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span class="text-sm text-slate-400">projects@velocitybuild.com</span></li><li class="flex items-start gap-3"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0 mt-0.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span class="text-sm text-slate-400">Serving International Markets<br>Global Logistics Available</span></li></ul></div>
+            <div><h4 class="text-xs font-bold uppercase tracking-widest mb-4">გადაწყვეტილებები</h4><ul class="space-y-2 text-sm text-slate-400"><li><a href="#projects" class="hover:text-orange transition-colors">სამრეწველო საწყობები</a></li><li><a href="#projects" class="hover:text-orange transition-colors">კომერციული შენობები</a></li><li><a href="#" class="hover:text-orange transition-colors">ცივი საწყობები</a></li><li><a href="#" class="hover:text-orange transition-colors">სასოფლო-სამეურნეო</a></li></ul></div>
+            <div><h4 class="text-xs font-bold uppercase tracking-widest mb-4">პროდუქტები</h4><ul class="space-y-2 text-sm text-slate-400"><li><a href="#products" class="hover:text-orange transition-colors">კედლის პანელები</a></li><li><a href="#products" class="hover:text-orange transition-colors">სახურავის პანელები</a></li><li><a href="#products" class="hover:text-orange transition-colors">ფოლადის კარკასი</a></li><li><a href="#products" class="hover:text-orange transition-colors">სამაგრი ელემენტები</a></li></ul></div>
+            <div><h4 class="text-xs font-bold uppercase tracking-widest mb-4">კონტაქტი</h4><ul class="space-y-3 text-sm text-slate-400"><li class="flex items-center gap-2"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>+1 (800) 000-0000</li><li class="flex items-center gap-2"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>info@velocitybuild.com</li></ul></div>
+        </div>
+        <div class="border-t border-white/10 pt-6 flex flex-col sm:flex-row justify-between gap-2 text-xs text-slate-500">
+            <p>&copy; 2025 Velocity Build. ყველა უფლება დაცულია.</p>
+            <div class="flex gap-4"><a href="#" class="hover:text-slate-300">კონფიდენციალურობა</a><a href="#" class="hover:text-slate-300">პირობები</a></div>
         </div>
     </div>
-    <div class="border-t border-white/10"><div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3"><p class="text-xs text-slate-500 text-center sm:text-left">&copy; 2025 Velocity Build. All rights reserved. All structural designs require independent engineering sign-off before construction.</p><div class="flex gap-5"><a href="#" class="text-xs text-slate-500 hover:text-slate-300 transition-colors">Privacy Policy</a><a href="#" class="text-xs text-slate-500 hover:text-slate-300 transition-colors">Terms of Use</a><a href="#" class="text-xs text-slate-500 hover:text-slate-300 transition-colors">Cookie Policy</a></div></div></div>
 </footer>
 
 <script>
-    const hamburger = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobile-menu');
-    hamburger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
-    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
-
-    const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => {
-        navbar.classList.toggle('shadow-md', window.scrollY > 20);
-        navbar.classList.toggle('shadow-sm', window.scrollY <= 20);
-    }, { passive: true });
-
+    document.getElementById('hamburger').addEventListener('click', () =>
+        document.getElementById('mobile-menu').classList.toggle('open'));
+    document.querySelectorAll('#mobile-menu a').forEach(a =>
+        a.addEventListener('click', () => document.getElementById('mobile-menu').classList.remove('open')));
     function selectPkg(el, val) {
         document.querySelectorAll('.pkg-card').forEach(c => c.classList.remove('active'));
         el.classList.add('active');
-        document.getElementById('pkg-value').value = val;
+        document.getElementById('pkg-val').value = val;
     }
-
-    function handleQuoteSubmit(e) {
+    function handleSubmit(e) {
         e.preventDefault();
         document.getElementById('quote-form').classList.add('hidden');
         document.getElementById('form-success').classList.remove('hidden');
     }
-
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) { entry.target.classList.add('visible'); revealObserver.unobserve(entry.target); }
-        });
-    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-
-    document.querySelectorAll('.reveal').forEach((el, i) => {
-        el.style.transitionDelay = `${(i % 4) * 80}ms`;
-        revealObserver.observe(el);
-    });
-
     document.querySelectorAll('a[href^="#"]').forEach(a => {
         a.addEventListener('click', e => {
-            const target = document.querySelector(a.getAttribute('href'));
-            if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+            const t = document.querySelector(a.getAttribute('href'));
+            if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
         });
     });
 </script>
