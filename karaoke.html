@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#080812">
+    <title>CaraOKE — Car Karaoke</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'k-dark':   '#080812',
+                        'k-card':   '#0f0f1e',
+                        'k-purple': '#7c3aed',
+                        'k-pink':   '#ec4899',
+                        'k-cyan':   '#06b6d4',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #080812; overflow: hidden; }
+        :root { --safe-bottom: env(safe-area-inset-bottom, 0px); }
+
+        /* ── Scrollbar ── */
+        ::-webkit-scrollbar { width: 3px; height: 3px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #7c3aed; border-radius: 2px; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+
+        /* ── Screens ── */
+        .screen { display: none; flex: 1; flex-direction: column; overflow: hidden; min-height: 0; }
+        .screen.active { display: flex; }
+
+        /* ── Song card ── */
+        .song-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            transition: background 0.15s, border-color 0.15s, transform 0.1s;
+        }
+        .song-card:active { background: rgba(124,58,237,0.18); border-color: rgba(124,58,237,0.45); transform: scale(0.98); }
+
+        /* ── Genre pill ── */
+        .gpill {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.18s;
+            white-space: nowrap;
+        }
+        .gpill.on { background: rgba(124,58,237,0.28); border-color: #7c3aed; color: #c4b5fd; }
+
+        /* ── Queue item ── */
+        .qitem { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); }
+        .qitem.now { background: rgba(124,58,237,0.14); border-color: rgba(124,58,237,0.4); }
+
+        /* ── Nav button ── */
+        .navbtn { transition: color 0.15s; color: #475569; }
+        .navbtn.on { color: #c4b5fd; }
+        .navbtn.on .ndot { background: #7c3aed; }
+        .ndot { width: 4px; height: 4px; border-radius: 2px; background: transparent; margin: 0 auto; transition: background 0.15s; }
+
+        /* ── Mic pulse ── */
+        @keyframes mpulse {
+            0%,100% { box-shadow: 0 0 0 0 rgba(236,72,153,0.5); }
+            50%      { box-shadow: 0 0 0 10px rgba(236,72,153,0); }
+        }
+        .mic-on { animation: mpulse 1.4s ease-in-out infinite; background: rgba(236,72,153,0.25) !important; color: #ec4899 !important; }
+
+        /* ── EQ bars ── */
+        @keyframes eq1 { 0%,100%{height:15%} 50%{height:85%} }
+        @keyframes eq2 { 0%,100%{height:55%} 30%{height:15%} 70%{height:95%} }
+        @keyframes eq3 { 0%,100%{height:35%} 50%{height:65%} }
+        @keyframes eq4 { 0%,100%{height:75%} 50%{height:25%} }
+        @keyframes eq5 { 0%,100%{height:25%} 50%{height:75%} }
+        .eq { display:flex; align-items:flex-end; gap:3px; height:22px; }
+        .eq span { width:4px; border-radius:2px; background: linear-gradient(to top,#7c3aed,#ec4899); }
+        .eq span:nth-child(1) { animation: eq1 0.8s ease-in-out infinite; }
+        .eq span:nth-child(2) { animation: eq2 0.6s ease-in-out infinite; }
+        .eq span:nth-child(3) { animation: eq3 0.9s ease-in-out infinite; }
+        .eq span:nth-child(4) { animation: eq4 0.7s ease-in-out infinite; }
+        .eq span:nth-child(5) { animation: eq5 0.85s ease-in-out infinite; }
+        .eq.off span { animation-play-state:paused; height:4px !important; }
+
+        /* ── Toast ── */
+        @keyframes tslide { from{transform:translateX(-50%) translateY(16px);opacity:0} to{transform:translateX(-50%) translateY(0);opacity:1} }
+        .toast { position:fixed; bottom:88px; left:50%; transform:translateX(-50%); padding:11px 20px; border-radius:100px; font-size:13px; font-weight:600; color:#fff; white-space:nowrap; z-index:200; animation:tslide 0.25s ease; box-shadow:0 8px 32px rgba(0,0,0,0.5); }
+
+        /* ── Gradient text ── */
+        .gtxt { background: linear-gradient(135deg,#c4b5fd,#ec4899); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+        /* ── Modal ── */
+        .modal { position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.72);backdrop-filter:blur(6px); display:none; align-items:flex-end; justify-content:center; }
+        .modal.open { display:flex; }
+        .modal-center { display:none; align-items:center; justify-content:center; }
+        .modal-center.open { display:flex; }
+        .msheet { width:100%; max-width:480px; background:#0f0f1e; border-top:1px solid rgba(255,255,255,0.08); border-radius:24px 24px 0 0; padding:24px 24px calc(24px + var(--safe-bottom)); }
+        .mpop { background:#0f0f1e; border:1px solid rgba(255,255,255,0.1); border-radius:24px; padding:24px; width:calc(100% - 48px); max-width:320px; }
+        .handle { width:40px;height:4px;border-radius:2px;background:rgba(255,255,255,0.18);margin:0 auto 20px; }
+
+        /* ── Input ── */
+        .kinput { background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.1); color:#fff; border-radius:14px; padding:14px 16px; font-size:15px; width:100%; outline:none; transition:border-color 0.15s; }
+        .kinput:focus { border-color:#7c3aed; }
+        .kinput::placeholder { color:#475569; }
+
+        /* ── Buttons ── */
+        .kbtn-grad { background:linear-gradient(135deg,#7c3aed,#ec4899); color:#fff; border:none; border-radius:16px; font-weight:700; font-size:15px; padding:16px; width:100%; transition:opacity 0.15s,transform 0.1s; cursor:pointer; }
+        .kbtn-grad:active { opacity:0.85; transform:scale(0.98); }
+        .kbtn-ghost { background:rgba(255,255,255,0.06); color:#94a3b8; border:none; border-radius:14px; font-weight:600; font-size:14px; padding:14px; width:100%; cursor:pointer; transition:background 0.15s; }
+        .kbtn-ghost:active { background:rgba(255,255,255,0.1); }
+        .kbtn-outline { background:rgba(124,58,237,0.15); color:#c4b5fd; border:1px solid rgba(124,58,237,0.35); border-radius:16px; font-weight:600; font-size:15px; padding:15px; width:100%; cursor:pointer; transition:background 0.15s; }
+        .kbtn-outline:active { background:rgba(124,58,237,0.25); }
+
+        /* ── Icon buttons ── */
+        .ibtn { background:rgba(255,255,255,0.07); border:none; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:background 0.15s,transform 0.1s; color:#94a3b8; }
+        .ibtn:active { transform:scale(0.9); background:rgba(255,255,255,0.12); }
+
+        /* ── Singer chip ── */
+        .schip { border-radius:100px; padding:8px 14px; font-size:12px; font-weight:600; white-space:nowrap; background:rgba(255,255,255,0.07); color:#94a3b8; border:1px solid transparent; }
+        .schip.cur { background:rgba(124,58,237,0.28); color:#c4b5fd; border-color:rgba(124,58,237,0.45); }
+
+        /* ── Volume sliders ── */
+        .vol-slider { -webkit-appearance:none; appearance:none; width:100%; height:5px; border-radius:3px; background:rgba(255,255,255,0.1); outline:none; cursor:pointer; }
+        .vol-slider::-webkit-slider-thumb { -webkit-appearance:none; appearance:none; width:18px; height:18px; border-radius:50%; background:linear-gradient(135deg,#7c3aed,#ec4899); cursor:pointer; box-shadow:0 2px 8px rgba(124,58,237,0.5); }
+        .vol-slider::-moz-range-thumb { width:18px; height:18px; border-radius:50%; background:linear-gradient(135deg,#7c3aed,#ec4899); cursor:pointer; border:none; box-shadow:0 2px 8px rgba(124,58,237,0.5); }
+
+        /* ── Car mode ── */
+        body.car .song-card { padding-top:20px; padding-bottom:20px; }
+        body.car #songs-list .text-sm { font-size:17px; }
+        body.car #songs-list .text-xs { font-size:13px; }
+    </style>
+</head>
+<body class="h-screen text-white">
+
+<!-- ████████████████████ APP ████████████████████ -->
+<div id="app" class="flex flex-col h-screen" style="max-height:100dvh;">
+
+    <!-- ── TOP BAR ── -->
+    <div class="flex-shrink-0 flex items-center justify-between px-4 py-3" style="background:rgba(4,4,10,0.95);border-bottom:1px solid rgba(255,255,255,0.05);">
+        <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-xl flex items-center justify-center" style="background:linear-gradient(135deg,#7c3aed,#ec4899);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            </div>
+            <span class="font-black text-xl tracking-tight gtxt">CaraOKE</span>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <!-- Car mode toggle -->
+            <button id="carmode-btn" onclick="toggleCarMode()" title="Car Mode" class="ibtn w-9 h-9">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v5"/><circle cx="18" cy="17" r="2"/><circle cx="7" cy="17" r="2"/>
+                    <path d="M13 17H9"/>
+                </svg>
+            </button>
+            <!-- Bluetooth tip (static — connect via iOS Settings to keep A2DP stereo) -->
+            <div title="Connect audio via iOS Settings → Bluetooth" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold" style="background:rgba(255,255,255,0.05);color:#475569;cursor:default;" onclick="toast('Connect audio via iOS Settings → Bluetooth','info')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6.5 6.5 17.5 17.5 12 23 12 1 17.5 6.5 6.5 17.5"/>
+                </svg>
+                <span>BT</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════ SCREEN: HOME ══════════════ -->
+    <div id="screen-home" class="screen active">
+
+        <!-- Search -->
+        <div class="px-4 pt-3 pb-2 flex-shrink-0">
+            <div class="relative">
+                <svg class="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <input id="search-inp" type="text" placeholder="Search songs or artists…" oninput="onSearch(this.value)"
+                    class="kinput pl-12 text-base" style="border-radius:18px;font-size:16px;padding:15px 16px 15px 48px;"/>
+            </div>
+        </div>
+
+        <!-- Genres -->
+        <div class="px-4 pb-2 flex-shrink-0 overflow-x-auto no-scrollbar">
+            <div class="flex gap-2" id="gpills" style="width:max-content;">
+                <button class="gpill on px-4 py-2 rounded-full text-sm font-semibold"  onclick="pickGenre('all',this)">All</button>
+                <button class="gpill px-4 py-2 rounded-full text-sm font-semibold text-slate-400" onclick="pickGenre('pop',this)">Pop</button>
+                <button class="gpill px-4 py-2 rounded-full text-sm font-semibold text-slate-400" onclick="pickGenre('rock',this)">Rock</button>
+                <button class="gpill px-4 py-2 rounded-full text-sm font-semibold text-slate-400" onclick="pickGenre('hiphop',this)">Hip-Hop</button>
+                <button class="gpill px-4 py-2 rounded-full text-sm font-semibold text-slate-400" onclick="pickGenre('80s',this)">80s</button>
+                <button class="gpill px-4 py-2 rounded-full text-sm font-semibold text-slate-400" onclick="pickGenre('90s',this)">90s</button>
+                <button class="gpill px-4 py-2 rounded-full text-sm font-semibold text-slate-400" onclick="pickGenre('country',this)">Country</button>
+                <button class="gpill px-4 py-2 rounded-full text-sm font-semibold text-slate-400" onclick="pickGenre('rnb',this)">R&amp;B</button>
+                <button class="gpill px-4 py-2 rounded-full text-sm font-semibold text-slate-400" onclick="pickGenre('latin',this)">Latin</button>
+            </div>
+        </div>
+
+        <!-- Add custom -->
+        <div class="px-4 pb-2 flex-shrink-0">
+            <button onclick="openAddCustom()" class="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl font-semibold text-sm" style="background:linear-gradient(135deg,rgba(124,58,237,0.18),rgba(236,72,153,0.18));border:1px solid rgba(124,58,237,0.35);color:#c4b5fd;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                Add Song from YouTube URL
+            </button>
+        </div>
+
+        <!-- Section label -->
+        <div class="px-4 pb-1.5 flex-shrink-0 flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-widest text-slate-600" id="sec-lbl">Popular Songs</span>
+            <span class="text-xs text-slate-700" id="song-cnt"></span>
+        </div>
+
+        <!-- Song list -->
+        <div id="songs-list" class="flex-1 overflow-y-auto px-4 pb-4 space-y-2"></div>
+    </div>
+
+    <!-- ══════════════ SCREEN: PLAYER ══════════════ -->
+    <div id="screen-player" class="screen">
+
+        <!-- Now-playing strip -->
+        <div class="flex-shrink-0 px-4 py-2.5 flex items-center gap-3" style="background:rgba(4,4,10,0.9);border-bottom:1px solid rgba(255,255,255,0.05);">
+            <div class="flex-1 min-w-0">
+                <div id="p-title" class="font-bold text-base text-white truncate">No song selected</div>
+                <div id="p-artist" class="text-sm text-slate-400 truncate">—</div>
+            </div>
+            <div class="flex items-center gap-2 flex-shrink-0">
+                <div id="eq-bars" class="eq off"><span></span><span></span><span></span><span></span><span></span></div>
+                <button id="mic-btn" onclick="toggleMic()" title="Microphone" class="ibtn w-10 h-10">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                        <path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                        <line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>
+                    </svg>
+                </button>
+                <button onclick="goScreen('queue')" class="ibtn w-10 h-10 relative">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                    <span id="q-badge" class="hidden absolute -top-1 -right-1 w-5 h-5 rounded-full text-xs font-bold flex items-center justify-center" style="background:#ec4899;color:#fff;"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Video area -->
+        <div class="flex-1 relative bg-black overflow-hidden">
+            <!-- Placeholder -->
+            <div id="p-placeholder" class="absolute inset-0 flex flex-col items-center justify-center gap-5 px-8" style="background:#080812;">
+                <div class="w-24 h-24 rounded-full flex items-center justify-center" style="background:rgba(124,58,237,0.12);border:2px solid rgba(124,58,237,0.28);">
+                    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="1.4" stroke-linecap="round">
+                        <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+                    </svg>
+                </div>
+                <div class="text-center">
+                    <div class="text-white font-semibold text-lg mb-1">No song loaded</div>
+                    <div class="text-slate-500 text-sm">Pick a song from Home to get started</div>
+                </div>
+                <button onclick="goScreen('home')" class="kbtn-grad" style="width:auto;padding:14px 32px;">Browse Songs</button>
+            </div>
+            <!-- YouTube iframe -->
+            <iframe id="yt-frame" class="hidden absolute inset-0 w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="border:none;"></iframe>
+            <!-- Fallback when video blocks embedding -->
+            <div id="yt-fallback" class="hidden absolute inset-0 flex flex-col items-center justify-center gap-5 px-8" style="background:#080812;">
+                <div class="w-16 h-16 rounded-full flex items-center justify-center" style="background:rgba(239,68,68,0.1);border:2px solid rgba(239,68,68,0.25);">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                </div>
+                <div class="text-center">
+                    <div class="text-white font-semibold mb-1">Video blocked by owner</div>
+                    <div class="text-slate-500 text-sm">Open it directly on YouTube instead.</div>
+                </div>
+                <a id="yt-fallback-link" href="#" target="_blank" rel="noopener" class="kbtn-grad flex items-center gap-2" style="width:auto;padding:14px 28px;text-decoration:none;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    Open on YouTube
+                </a>
+                <button onclick="skipFallback()" class="text-xs text-slate-600 underline">Skip this song</button>
+            </div>
+        </div>
+
+        <!-- Mic visualizer -->
+        <div id="mic-viz" class="hidden flex-shrink-0 px-3 py-2" style="background:rgba(4,4,10,0.95);border-top:1px solid rgba(255,255,255,0.05);">
+            <div class="flex items-center gap-2 mb-1.5">
+                <span class="text-xs font-bold text-pink-500 uppercase tracking-wider">Mic Level</span>
+                <span class="text-xs text-slate-600 ml-auto">Voice vol</span>
+                <input id="mic-vol" type="range" min="0" max="1.5" step="0.05" value="0.7" oninput="setMicVol(this.value)" class="vol-slider" style="width:80px;">
+            </div>
+            <canvas id="mic-canvas" height="44" class="w-full rounded-xl" style="height:44px;display:block;"></canvas>
+        </div>
+
+        <!-- Controls bar -->
+        <div class="flex-shrink-0 flex items-center justify-between px-5 py-3" style="background:rgba(4,4,10,0.97);border-top:1px solid rgba(255,255,255,0.05);">
+            <button onclick="playPrev()" class="ibtn w-12 h-12">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
+            </button>
+            <div class="text-center">
+                <div class="text-xs text-slate-600 font-bold uppercase tracking-widest">Singing Now</div>
+                <div id="singing-now" class="text-sm font-bold text-purple-300 mt-0.5">—</div>
+            </div>
+            <button onclick="playNext()" class="ibtn w-12 h-12">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- ══════════════ SCREEN: QUEUE ══════════════ -->
+    <div id="screen-queue" class="screen">
+
+        <div class="flex-shrink-0 px-4 pt-4 pb-3 flex items-center justify-between">
+            <h2 class="text-xl font-black text-white">Queue</h2>
+            <button onclick="clearQueue()" class="text-xs font-semibold text-red-400 px-3 py-1.5 rounded-full" style="background:rgba(239,68,68,0.1);">Clear All</button>
+        </div>
+
+        <!-- Singers row -->
+        <div class="flex-shrink-0 px-4 pb-3 overflow-x-auto no-scrollbar">
+            <div id="singers-row" class="flex gap-2" style="width:max-content;">
+                <button onclick="openAddSinger()" class="schip flex items-center gap-1.5" style="border:1px dashed rgba(255,255,255,0.15);cursor:pointer;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Add Singer
+                </button>
+            </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto px-4 pb-3 space-y-2" id="queue-list"></div>
+
+        <div class="flex-shrink-0 px-4 pb-4">
+            <button onclick="goScreen('home')" class="kbtn-outline">+ Add More Songs</button>
+        </div>
+    </div>
+
+    <!-- ── BOTTOM NAV ── -->
+    <div class="flex-shrink-0 flex" style="background:rgba(4,4,10,0.98);border-top:1px solid rgba(255,255,255,0.06);padding-bottom:var(--safe-bottom);">
+        <button class="navbtn on flex-1 flex flex-col items-center gap-1 py-3" id="nav-home" onclick="goScreen('home')">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span class="text-xs font-semibold">Home</span>
+            <div class="ndot"></div>
+        </button>
+        <button class="navbtn flex-1 flex flex-col items-center gap-1 py-3" id="nav-player" onclick="goScreen('player')">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+            <span class="text-xs font-semibold">Now Playing</span>
+            <div class="ndot"></div>
+        </button>
+        <button class="navbtn flex-1 flex flex-col items-center gap-1 py-3" id="nav-queue" onclick="goScreen('queue')">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+            <span class="text-xs font-semibold">Queue</span>
+            <div class="ndot"></div>
+        </button>
+    </div>
+</div>
+
+<!-- ████ MODAL: Add Custom Song ████ -->
+<div id="modal-custom" class="modal" onclick="backdropClose(event,'modal-custom')">
+    <div class="msheet">
+        <div class="handle"></div>
+        <h3 class="text-xl font-black text-white mb-1.5">Add Song from YouTube</h3>
+        <p class="text-sm text-slate-400 mb-5">Search YouTube for <em>[Song] karaoke</em>, copy the URL and paste it here.</p>
+
+        <div class="mb-3">
+            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">YouTube URL *</label>
+            <input id="c-url" type="url" placeholder="https://youtube.com/watch?v=…" class="kinput"/>
+        </div>
+        <div class="grid grid-cols-2 gap-3 mb-5">
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Song Title</label>
+                <input id="c-title" type="text" placeholder="Title" class="kinput" style="font-size:14px;padding:12px 14px;"/>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Artist</label>
+                <input id="c-artist" type="text" placeholder="Artist" class="kinput" style="font-size:14px;padding:12px 14px;"/>
+            </div>
+        </div>
+
+        <button onclick="addCustomSong()" class="kbtn-grad mb-2">Add to Queue</button>
+        <button onclick="closeModal('modal-custom')" class="kbtn-ghost">Cancel</button>
+
+        <div class="mt-4 p-3.5 rounded-2xl" style="background:rgba(6,182,212,0.07);border:1px solid rgba(6,182,212,0.18);">
+            <p class="text-xs text-cyan-400 leading-relaxed"><strong>Tip:</strong> On YouTube, search <strong>[Song name] karaoke</strong> to find versions with on-screen lyrics. Channels like Sing King, KaraFun, and Lyrics Karaoke work great.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ████ MODAL: Song Actions ████ -->
+<div id="modal-song" class="modal" onclick="backdropClose(event,'modal-song')">
+    <div class="msheet">
+        <div class="handle"></div>
+        <div class="flex items-center gap-4 mb-6">
+            <div class="w-14 h-14 rounded-2xl flex-shrink-0 flex items-center justify-center" style="background:linear-gradient(135deg,rgba(124,58,237,0.3),rgba(236,72,153,0.3));">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="1.8" stroke-linecap="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            </div>
+            <div class="min-w-0">
+                <div id="ms-title" class="font-bold text-white text-base truncate">Song</div>
+                <div id="ms-artist" class="text-slate-400 text-sm truncate">Artist</div>
+            </div>
+        </div>
+        <div class="space-y-2.5 mb-4">
+            <button onclick="doPlayNow()" class="kbtn-grad flex items-center justify-center gap-3">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Play Now
+            </button>
+            <button onclick="doAddQueue()" class="kbtn-outline flex items-center justify-center gap-3">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add to Queue
+            </button>
+        </div>
+        <button onclick="closeModal('modal-song')" class="kbtn-ghost">Cancel</button>
+    </div>
+</div>
+
+<!-- ████ MODAL: Add Singer ████ -->
+<div id="modal-singer" class="modal-center" onclick="backdropClose(event,'modal-singer')">
+    <div class="mpop">
+        <h3 class="text-lg font-black text-white mb-1 text-center">Add Singer</h3>
+        <p class="text-xs text-slate-500 text-center mb-4">Name will show in queue & rotation</p>
+        <input id="singer-inp" type="text" placeholder="Enter name…" class="kinput mb-3" onkeydown="if(event.key==='Enter')doAddSinger()"/>
+        <button onclick="doAddSinger()" class="kbtn-grad mb-2">Add</button>
+        <button onclick="closeModal('modal-singer')" class="kbtn-ghost">Cancel</button>
+    </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════════════
+const S = {
+    genre: 'all',
+    query: '',
+    current: null,
+    queue: [],
+    singers: [],
+    singerIdx: 0,
+    selectedSong: null,
+    micActive: false,
+    micStream: null,
+    audioCtx: null,
+    analyser: null,
+    gainNode: null,
+    rafId: null,
+    micSens: 2,
+    micVol: 0.7,
+    carMode: false,
+};
+
+// ════════════════════════════════════════════════════════
+// SONG LIBRARY
+// ════════════════════════════════════════════════════════
+const LIBRARY = [
+    { id:1,  title:"Shape of You",               artist:"Ed Sheeran",                 genre:"pop",     ytId:"o71_MatpYV0" },
+    { id:2,  title:"Someone Like You",            artist:"Adele",                      genre:"pop",     ytId:"_uORhCSX2f8" },
+    { id:3,  title:"Rolling in the Deep",         artist:"Adele",                      genre:"pop",     ytId:"LOd3u6FtkAk" },
+    { id:4,  title:"Blinding Lights",             artist:"The Weeknd",                 genre:"pop",     ytId:"Cj4hcXZs3Lc" },
+    { id:5,  title:"Stay With Me",                artist:"Sam Smith",                  genre:"pop",     ytId:"7C8034DlmIM" },
+    { id:6,  title:"Shallow",                     artist:"Lady Gaga & Bradley Cooper", genre:"pop",     ytId:"_nHT_k9Rswc" },
+    { id:7,  title:"bad guy",                     artist:"Billie Eilish",              genre:"pop",     ytId:"GsFlbMS7UIc" },
+    { id:8,  title:"Uptown Funk",                 artist:"Mark Ronson ft. Bruno Mars", genre:"pop",     ytId:"F3R6eJKAz4M" },
+    { id:9,  title:"Bohemian Rhapsody",           artist:"Queen",                      genre:"rock",    ytId:"9Lxm0iSnKNc" },
+    { id:10, title:"Sweet Home Alabama",          artist:"Lynyrd Skynyrd",             genre:"rock",    ytId:"ShMxICBtGNg" },
+    { id:11, title:"Don't Stop Believin'",        artist:"Journey",                    genre:"rock",    ytId:"c8wn2fMYvns" },
+    { id:12, title:"Mr. Brightside",              artist:"The Killers",                genre:"rock",    ytId:"c1X3Lg7RVkk" },
+    { id:13, title:"Sweet Caroline",              artist:"Neil Diamond",               genre:"rock",    ytId:"srLoAl1mhFw" },
+    { id:14, title:"Wonderwall",                  artist:"Oasis",                      genre:"rock",    ytId:"R_EXyGWI9rU" },
+    { id:15, title:"Lose Yourself",               artist:"Eminem",                     genre:"hiphop",  ytId:"F-p2BQ4H1nA" },
+    { id:16, title:"HUMBLE.",                     artist:"Kendrick Lamar",             genre:"hiphop",  ytId:"AnQESyZisU0" },
+    { id:17, title:"Sicko Mode",                  artist:"Travis Scott",               genre:"hiphop",  ytId:"TwuE8y667hg" },
+    { id:18, title:"Take On Me",                  artist:"a-ha",                       genre:"80s",     ytId:"bC4ER15Hj10" },
+    { id:19, title:"Africa",                      artist:"Toto",                       genre:"80s",     ytId:"CRrZlEF7-SU" },
+    { id:20, title:"Livin' on a Prayer",          artist:"Bon Jovi",                   genre:"80s",     ytId:"nsJ-j5wDX5c" },
+    { id:21, title:"Eye of the Tiger",            artist:"Survivor",                   genre:"80s",     ytId:"83ZFZPhxskc" },
+    { id:22, title:"Girls Just Want to Have Fun", artist:"Cyndi Lauper",               genre:"80s",     ytId:"-Fg7m1ZqkxI" },
+    { id:23, title:"I Will Always Love You",      artist:"Whitney Houston",            genre:"90s",     ytId:"8kotNQ07ZEw" },
+    { id:24, title:"Smells Like Teen Spirit",     artist:"Nirvana",                    genre:"90s",     ytId:"lMdvpJpaolE" },
+    { id:25, title:"Baby One More Time",          artist:"Britney Spears",             genre:"90s",     ytId:"PYpU2TxIzAM" },
+    { id:26, title:"Friends in Low Places",       artist:"Garth Brooks",               genre:"country", ytId:"MHGgUKGT3Vw" },
+    { id:27, title:"Jolene",                      artist:"Dolly Parton",               genre:"country", ytId:"r9lVYyhkqUU" },
+    { id:28, title:"Take Me Home, Country Roads", artist:"John Denver",                genre:"country", ytId:"l-VcTVtT3h8" },
+    { id:29, title:"Crazy in Love",               artist:"Beyoncé",                    genre:"rnb",     ytId:"-RwFOzjG6o0" },
+    { id:30, title:"No Scrubs",                   artist:"TLC",                        genre:"rnb",     ytId:"CUFIRtDz-Oo" },
+    { id:31, title:"Despacito",                   artist:"Luis Fonsi ft. Daddy Yankee",genre:"latin",   ytId:"jRpDuEgqQQQ" },
+    { id:32, title:"Waka Waka",                   artist:"Shakira",                    genre:"latin",   ytId:"TAKuexu97GI" },
+];
+
+const GENRE_NAMES = { pop:'Pop', rock:'Rock', hiphop:'Hip-Hop', '80s':'80s', '90s':'90s', country:'Country', rnb:'R&B', latin:'Latin' };
+
+// ════════════════════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════════════════════
+function goScreen(name) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + name).classList.add('active');
+    document.querySelectorAll('.navbtn').forEach(b => { b.classList.remove('on'); b.querySelector('.ndot').style.background = 'transparent'; });
+    const nb = document.getElementById('nav-' + name);
+    if (nb) { nb.classList.add('on'); nb.querySelector('.ndot').style.background = '#7c3aed'; }
+    if (name === 'queue') renderQueue();
+}
+
+// ════════════════════════════════════════════════════════
+// SEARCH + FILTER
+// ════════════════════════════════════════════════════════
+function onSearch(v) { S.query = v.toLowerCase(); renderSongs(); }
+
+function pickGenre(g, el) {
+    S.genre = g;
+    document.querySelectorAll('.gpill').forEach(p => { p.classList.remove('on'); p.style.color='#94a3b8'; });
+    el.classList.add('on'); el.style.color = '';
+    renderSongs();
+}
+
+function filtered() {
+    return LIBRARY.filter(s => {
+        const gOk = S.genre === 'all' || s.genre === S.genre;
+        const qOk = !S.query || s.title.toLowerCase().includes(S.query) || s.artist.toLowerCase().includes(S.query);
+        return gOk && qOk;
+    });
+}
+
+function renderSongs() {
+    const list = filtered();
+    document.getElementById('song-cnt').textContent = list.length + ' songs';
+    document.getElementById('sec-lbl').textContent = S.query ? 'Results' : (S.genre === 'all' ? 'Popular Songs' : (GENRE_NAMES[S.genre] || S.genre));
+    const el = document.getElementById('songs-list');
+    if (!list.length) {
+        el.innerHTML = `<div class="flex flex-col items-center py-14 text-center"><div class="text-5xl mb-3">🎵</div><div class="text-slate-400 font-semibold">No songs found</div><div class="text-slate-600 text-sm mt-1">Try a different search or add a YouTube karaoke URL</div></div>`;
+        return;
+    }
+    el.innerHTML = list.map(s => `
+        <button class="song-card w-full flex items-center gap-3.5 px-4 py-3.5 rounded-2xl text-left" onclick="openSongModal(${s.id})">
+            <div class="w-11 h-11 rounded-xl flex-shrink-0 flex items-center justify-center" style="background:linear-gradient(135deg,rgba(124,58,237,0.22),rgba(236,72,153,0.22));">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="2" stroke-linecap="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            </div>
+            <div class="flex-1 min-w-0">
+                <div class="font-semibold text-white text-sm truncate">${esc(s.title)}</div>
+                <div class="text-slate-400 text-xs truncate mt-0.5">${esc(s.artist)}</div>
+            </div>
+            <div class="flex items-center gap-2 flex-shrink-0">
+                <span class="text-xs px-2 py-0.5 rounded-full" style="background:rgba(255,255,255,0.06);color:#475569;">${GENRE_NAMES[s.genre]||s.genre}</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#334155" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+            </div>
+        </button>`).join('');
+}
+
+// ════════════════════════════════════════════════════════
+// SONG MODAL
+// ════════════════════════════════════════════════════════
+function openSongModal(id) {
+    const s = LIBRARY.find(x => x.id === id);
+    if (!s) return;
+    S.selectedSong = s;
+    document.getElementById('ms-title').textContent = s.title;
+    document.getElementById('ms-artist').textContent = s.artist;
+    openModal('modal-song');
+}
+
+function doPlayNow() {
+    if (!S.selectedSong) return;
+    closeModal('modal-song');
+    playSong(S.selectedSong);
+    goScreen('player');
+}
+
+function doAddQueue() {
+    if (!S.selectedSong) return;
+    const s = S.selectedSong;
+    S.queue.push({ ...s, singerId: nextSingerId() });
+    closeModal('modal-song');
+    updateBadge();
+    toast(`"${s.title}" added to queue`);
+}
+
+// ════════════════════════════════════════════════════════
+// PLAYBACK
+// ════════════════════════════════════════════════════════
+function playSong(song) {
+    S.current = song;
+    const frame = document.getElementById('yt-frame');
+    const ph    = document.getElementById('p-placeholder');
+    const fb    = document.getElementById('yt-fallback');
+    const q = encodeURIComponent(`${song.title} ${song.artist} karaoke lyrics`);
+    document.getElementById('yt-fallback-link').href = `https://www.youtube.com/results?search_query=${q}`;
+    fb.classList.add('hidden');
+    frame.src = `https://www.youtube.com/embed/${song.ytId}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3&enablejsapi=1`;
+    frame.classList.remove('hidden');
+    ph.classList.add('hidden');
+    document.getElementById('p-title').textContent = song.title;
+    document.getElementById('p-artist').textContent = song.artist;
+    document.getElementById('eq-bars').classList.remove('off');
+    updateSingingNow();
+}
+
+function skipFallback() {
+    document.getElementById('yt-fallback').classList.add('hidden');
+    document.getElementById('p-placeholder').classList.remove('hidden');
+}
+
+function playNext() {
+    if (!S.queue.length) { toast('Queue is empty', 'info'); return; }
+    const next = S.queue.shift();
+    advanceSinger();
+    playSong(next);
+    updateBadge();
+    renderQueue();
+}
+
+function playPrev() {
+    if (S.current) { playSong(S.current); toast('Restarting song', 'info'); }
+}
+
+// ════════════════════════════════════════════════════════
+// QUEUE
+// ════════════════════════════════════════════════════════
+function renderQueue() {
+    const el = document.getElementById('queue-list');
+    if (!S.current && !S.queue.length) {
+        el.innerHTML = `<div class="flex flex-col items-center py-14 text-center"><div class="text-5xl mb-3">🎤</div><div class="text-slate-300 font-semibold text-lg">Queue is empty</div><div class="text-slate-500 text-sm mt-1">Add songs from Home to get started</div></div>`;
+        return;
+    }
+    let html = '';
+    if (S.current) {
+        html += `
+        <div class="qitem now rounded-2xl p-4 flex items-center gap-3">
+            <div class="w-1.5 h-10 rounded-full flex-shrink-0" style="background:linear-gradient(to bottom,#7c3aed,#ec4899);"></div>
+            <div class="flex-1 min-w-0">
+                <div class="text-xs font-bold text-purple-400 uppercase tracking-wider mb-0.5">Now Playing</div>
+                <div class="font-semibold text-white text-sm truncate">${esc(S.current.title)}</div>
+                <div class="text-slate-400 text-xs">${esc(S.current.artist)}</div>
+            </div>
+            <div class="eq flex-shrink-0"><span></span><span></span><span></span><span></span><span></span></div>
+        </div>`;
+    }
+    S.queue.forEach((s, i) => {
+        const sg = S.singers.find(x => x.id === s.singerId);
+        html += `
+        <div class="qitem rounded-2xl p-4 flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-sm font-bold text-slate-500" style="background:rgba(255,255,255,0.05);">${i+1}</div>
+            <div class="flex-1 min-w-0">
+                <div class="font-semibold text-white text-sm truncate">${esc(s.title)}</div>
+                <div class="text-xs text-slate-400">${esc(s.artist)}${sg?` · <span style="color:#a78bfa">${esc(sg.name)}</span>`:''}
+                </div>
+            </div>
+            <button onclick="removeQ(${i})" class="ibtn w-8 h-8 flex-shrink-0" style="color:#f87171;background:rgba(239,68,68,0.1);">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>`;
+    });
+    el.innerHTML = html;
+}
+
+function removeQ(i) { S.queue.splice(i,1); updateBadge(); renderQueue(); }
+
+function clearQueue() { S.queue=[]; updateBadge(); renderQueue(); }
+
+function updateBadge() {
+    const b = document.getElementById('q-badge');
+    if (S.queue.length) { b.textContent=S.queue.length; b.classList.remove('hidden'); b.classList.add('flex'); }
+    else { b.classList.add('hidden'); b.classList.remove('flex'); }
+}
+
+// ════════════════════════════════════════════════════════
+// SINGERS
+// ════════════════════════════════════════════════════════
+function openAddSinger() { openModal('modal-singer'); setTimeout(() => document.getElementById('singer-inp').focus(), 80); }
+
+function doAddSinger() {
+    const n = document.getElementById('singer-inp').value.trim();
+    if (!n) return;
+    S.singers.push({ id: Date.now(), name: n });
+    document.getElementById('singer-inp').value = '';
+    closeModal('modal-singer');
+    renderSingers();
+    toast(`${n} added as singer`);
+}
+
+function renderSingers() {
+    const row = document.getElementById('singers-row');
+    row.querySelectorAll('.schip').forEach(c => c.remove());
+    const addBtn = row.querySelector('button');
+    S.singers.forEach((sg, i) => {
+        const d = document.createElement('div');
+        d.className = 'schip' + (i === S.singerIdx ? ' cur' : '');
+        d.textContent = '🎤 ' + sg.name;
+        row.insertBefore(d, addBtn);
+    });
+    updateSingingNow();
+}
+
+function nextSingerId() {
+    if (!S.singers.length) return null;
+    const i = (S.singerIdx + S.queue.length) % S.singers.length;
+    return S.singers[i]?.id;
+}
+
+function advanceSinger() {
+    if (S.singers.length) { S.singerIdx = (S.singerIdx + 1) % S.singers.length; renderSingers(); }
+}
+
+function updateSingingNow() {
+    const sg = S.singers[S.singerIdx];
+    document.getElementById('singing-now').textContent = sg ? sg.name : (S.current ? 'Playing' : '—');
+}
+
+// ════════════════════════════════════════════════════════
+// CUSTOM SONG
+// ════════════════════════════════════════════════════════
+function openAddCustom() { openModal('modal-custom'); setTimeout(() => document.getElementById('c-url').focus(), 80); }
+
+function extractYtId(raw) {
+    const tests = [
+        /[?&]v=([a-zA-Z0-9_-]{11})/,
+        /youtu\.be\/([a-zA-Z0-9_-]{11})/,
+        /embed\/([a-zA-Z0-9_-]{11})/,
+        /^([a-zA-Z0-9_-]{11})$/,
+    ];
+    for (const r of tests) { const m = raw.match(r); if (m) return m[1]; }
+    return null;
+}
+
+function addCustomSong() {
+    const url    = document.getElementById('c-url').value.trim();
+    const title  = document.getElementById('c-title').value.trim() || 'Custom Song';
+    const artist = document.getElementById('c-artist').value.trim() || 'Unknown Artist';
+    const ytId   = extractYtId(url);
+    if (!ytId) { toast('Enter a valid YouTube URL', 'err'); return; }
+
+    const song = { id: Date.now(), title, artist, genre:'custom', ytId };
+    S.queue.push({ ...song, singerId: nextSingerId() });
+    ['c-url','c-title','c-artist'].forEach(id => document.getElementById(id).value='');
+    closeModal('modal-custom');
+    updateBadge();
+    toast(`"${title}" added to queue`);
+}
+
+// ════════════════════════════════════════════════════════
+// MICROPHONE
+// ════════════════════════════════════════════════════════
+async function toggleMic() {
+    S.micActive ? stopMic() : await startMic();
+}
+
+async function startMic() {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+            audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: false },
+            video: false
+        });
+        S.micStream = stream;
+        S.audioCtx  = new (window.AudioContext || window.webkitAudioContext)();
+        S.analyser  = S.audioCtx.createAnalyser();
+        S.analyser.fftSize = 256;
+        S.gainNode  = S.audioCtx.createGain();
+        S.gainNode.gain.value = S.micVol;
+        const source = S.audioCtx.createMediaStreamSource(stream);
+        source.connect(S.analyser);
+        source.connect(S.gainNode);
+        S.gainNode.connect(S.audioCtx.destination);
+        S.micActive = true;
+        document.getElementById('mic-btn').classList.add('mic-on');
+        document.getElementById('mic-viz').classList.remove('hidden');
+        drawMic();
+        toast('Microphone on');
+    } catch(e) {
+        toast('Mic access denied', 'err');
+    }
+}
+
+function stopMic() {
+    S.micStream?.getTracks().forEach(t => t.stop());
+    S.micStream = null;
+    if (S.audioCtx) { S.audioCtx.close(); S.audioCtx = null; }
+    if (S.rafId) { cancelAnimationFrame(S.rafId); S.rafId = null; }
+    S.analyser = null;
+    S.gainNode = null;
+    S.micActive = false;
+    document.getElementById('mic-btn').classList.remove('mic-on');
+    document.getElementById('mic-viz').classList.add('hidden');
+    toast('Microphone off', 'info');
+}
+
+function drawMic() {
+    const canvas = document.getElementById('mic-canvas');
+    canvas.width  = canvas.offsetWidth * devicePixelRatio;
+    canvas.height = canvas.offsetHeight * devicePixelRatio;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+
+    const draw = () => {
+        if (!S.analyser) return;
+        S.rafId = requestAnimationFrame(draw);
+        const buf = new Uint8Array(S.analyser.frequencyBinCount);
+        S.analyser.getByteFrequencyData(buf);
+        ctx.clearRect(0, 0, W, H);
+        const bw = (W / buf.length) * 2.5;
+        let x = 0;
+        for (let i = 0; i < buf.length; i++) {
+            const bh = Math.min((buf[i] / 255) * S.micSens, 1) * H;
+            const g  = ctx.createLinearGradient(0, H - bh, 0, H);
+            g.addColorStop(0, '#ec4899'); g.addColorStop(1, '#7c3aed');
+            ctx.fillStyle = g;
+            ctx.beginPath();
+            if (ctx.roundRect) ctx.roundRect(x, H - bh, Math.max(1, bw - 1), bh, 2);
+            else ctx.rect(x, H - bh, Math.max(1, bw - 1), bh);
+            ctx.fill();
+            x += bw + 1;
+        }
+    };
+    draw();
+}
+
+
+// ════════════════════════════════════════════════════════
+// CAR MODE (larger text, simplified UI)
+// ════════════════════════════════════════════════════════
+function toggleCarMode() {
+    S.carMode = !S.carMode;
+    document.body.classList.toggle('car', S.carMode);
+    const btn = document.getElementById('carmode-btn');
+    btn.style.color     = S.carMode ? '#06b6d4' : '#475569';
+    btn.style.background = S.carMode ? 'rgba(6,182,212,0.18)' : 'rgba(255,255,255,0.07)';
+    toast(S.carMode ? 'Car Mode ON — bigger UI' : 'Car Mode OFF', 'info');
+}
+
+// ════════════════════════════════════════════════════════
+// MIC CONTROLS
+// ════════════════════════════════════════════════════════
+function setMicVol(v) {
+    S.micVol = parseFloat(v);
+    if (S.gainNode) S.gainNode.gain.value = S.micVol;
+}
+function setMicSens(v) {
+    S.micSens = parseFloat(v);
+}
+
+// ════════════════════════════════════════════════════════
+// MODALS
+// ════════════════════════════════════════════════════════
+function openModal(id) {
+    const el = document.getElementById(id);
+    el.classList.add('open');
+}
+function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+}
+function backdropClose(e, id) {
+    if (e.target === document.getElementById(id)) closeModal(id);
+}
+
+// ════════════════════════════════════════════════════════
+// TOAST
+// ════════════════════════════════════════════════════════
+let toastTimer;
+function toast(msg, type = 'ok') {
+    clearTimeout(toastTimer);
+    document.getElementById('toast-el')?.remove();
+    const colors = {
+        ok:   { bg:'rgba(124,58,237,0.92)', bd:'rgba(167,139,250,0.3)' },
+        err:  { bg:'rgba(220,38,38,0.92)',  bd:'rgba(248,113,113,0.3)' },
+        info: { bg:'rgba(15,15,30,0.96)',    bd:'rgba(255,255,255,0.1)' },
+    };
+    const c = colors[type] || colors.ok;
+    const t = document.createElement('div');
+    t.id = 'toast-el';
+    t.className = 'toast';
+    t.style.cssText = `background:${c.bg};border:1px solid ${c.bd};backdrop-filter:blur(12px);`;
+    t.textContent = msg;
+    document.body.appendChild(t);
+    toastTimer = setTimeout(() => t.remove(), 2800);
+}
+
+// ════════════════════════════════════════════════════════
+// UTILS
+// ════════════════════════════════════════════════════════
+function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ════════════════════════════════════════════════════════
+// YOUTUBE ERROR DETECTION
+// ════════════════════════════════════════════════════════
+window.addEventListener('message', (e) => {
+    if (!['https://www.youtube.com','https://www.youtube-nocookie.com'].includes(e.origin)) return;
+    try {
+        const d = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+        // Error codes 100=not found, 101/150=embedding blocked
+        if (d.event === 'onError' && [100,101,150].includes(d.info)) {
+            document.getElementById('yt-frame').classList.add('hidden');
+            document.getElementById('yt-fallback').classList.remove('hidden');
+        }
+    } catch(_) {}
+});
+
+// ════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════
+renderSongs();
+updateBadge();
+</script>
+</body>
+</html>

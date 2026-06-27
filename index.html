@@ -23,10 +23,8 @@
     <style>
         body { font-family: 'Inter', sans-serif; }
         .hero-bg { background: linear-gradient(135deg, #0a1628 0%, #1e3a8a 60%, #162d6e 100%); }
-
         #mobile-menu { display: none; }
         #mobile-menu.open { display: block; }
-
         .img-box {
             background: #1e293b;
             position: relative;
@@ -39,13 +37,6 @@
             transition: transform .4s ease;
         }
         .img-box:hover img { transform: scale(1.05); }
-
-        /* fallback when image missing */
-        .img-box img[src=""] ,
-        .img-box img:not([src]) {
-            display: none;
-        }
-
         .vb-input:focus {
             outline: none;
             border-color: #1e3a8a;
@@ -65,75 +56,56 @@
 </head>
 <body class="bg-white text-slate-800 antialiased">
 
-<!-- ── NAV ─────────────────────────────────────────────────── -->
+<!-- NAV -->
 <nav class="fixed top-0 inset-x-0 z-50 bg-white/95 backdrop-blur-sm border-b border-slate-200 shadow-sm">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
-
-        <!-- Logo -->
         <a href="#" class="flex items-center gap-2">
             <div class="w-8 h-8 bg-navy rounded flex items-center justify-center">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                    <polyline points="9 22 9 12 15 12 15 22"/>
-                </svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             </div>
             <span class="text-lg font-black text-navy">Velocity<span class="text-orange">Build</span></span>
         </a>
-
-        <!-- Desktop links -->
         <div class="hidden md:flex items-center gap-7 text-sm font-medium text-slate-600">
-            <a href="#projects"  class="hover:text-navy transition-colors">პროექტები</a>
-            <a href="#products"  class="hover:text-navy transition-colors">პროდუქტები</a>
-            <a href="#why"       class="hover:text-navy transition-colors">უპირატესობები</a>
-            <a href="#quote"     class="hover:text-navy transition-colors">ფასი</a>
+            <a href="#projects" class="hover:text-navy transition-colors">პროექტები</a>
+            <a href="#products" class="hover:text-navy transition-colors">პროდუქტები</a>
+            <a href="#why" class="hover:text-navy transition-colors">უპირატესობები</a>
+            <a href="#quote" class="hover:text-navy transition-colors">ფასი</a>
         </div>
-
         <a href="#quote" class="hidden md:inline-flex items-center gap-1.5 bg-orange hover:bg-orange-600 text-white text-sm font-bold px-5 py-2.5 rounded transition-all hover:-translate-y-px hover:shadow-lg">
             ფასის მოთხოვნა
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </a>
-
         <button id="hamburger" class="md:hidden p-2 text-slate-500">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                <line x1="3" y1="6"  x2="21" y2="6"/>
-                <line x1="3" y1="12" x2="21" y2="12"/>
-                <line x1="3" y1="18" x2="21" y2="18"/>
-            </svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </button>
     </div>
-
     <div id="mobile-menu" class="md:hidden bg-white border-t border-slate-100">
         <div class="px-5 py-4 flex flex-col gap-1">
             <a href="#projects" class="py-2.5 text-sm font-medium text-slate-600 border-b border-slate-100">პროექტები</a>
             <a href="#products" class="py-2.5 text-sm font-medium text-slate-600 border-b border-slate-100">პროდუქტები</a>
-            <a href="#why"      class="py-2.5 text-sm font-medium text-slate-600 border-b border-slate-100">უპირატესობები</a>
-            <a href="#quote"    class="py-2.5 text-sm font-medium text-slate-600 border-b border-slate-100">ფასი</a>
-            <a href="#quote" class="mt-3 bg-orange text-white text-sm font-bold py-3 rounded text-center">ფასის მოთხოვნა →</a>
+            <a href="#why" class="py-2.5 text-sm font-medium text-slate-600 border-b border-slate-100">უპირატესობები</a>
+            <a href="#quote" class="py-2.5 text-sm font-medium text-slate-600 border-b border-slate-100">ფასი</a>
+            <a href="#quote" class="mt-3 bg-orange text-white text-sm font-bold py-3 rounded text-center">ფასის მოთხოვნა &rarr;</a>
         </div>
     </div>
 </nav>
 
-
-<!-- ── HERO ────────────────────────────────────────────────── -->
+<!-- HERO -->
 <section class="hero-bg min-h-screen flex items-center pt-16">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 py-24">
-
         <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 mb-6">
             <span class="w-2 h-2 rounded-full bg-orange animate-pulse"></span>
-            <span class="text-sm text-white/75">სენდვიჩ პანელები · ფოლადის კარკასი · სრული პაკეტი</span>
+            <span class="text-sm text-white/75">სენდვიჩ პანელები &middot; ფოლადის კარკასი &middot; სრული პაკეტი</span>
         </div>
-
         <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight mb-5">
-            სწრაფი და ენერგო­ეფექტური<br>
+            სწრაფი და ენერგო&shy;ეფექტური<br>
             <span class="text-orange">შენობების</span> მიწოდება
         </h1>
-
         <p class="text-lg text-slate-300 max-w-xl leading-relaxed mb-8">
             ჩვენ მოგაწვდით სრულ სამშენებლო პაკეტს — კედლის პანელები, სახურავი,
             ფოლადის კარკასი და ყველა სამაგრი ელემენტი. თქვენ მხოლოდ ბეტონის
             საფუძველი გჭირდებათ — დანარჩენს ჩვენ ვაკეთებთ.
         </p>
-
         <div class="flex flex-col sm:flex-row gap-4 mb-14">
             <a href="#quote" class="inline-flex items-center justify-center gap-2 bg-orange hover:bg-orange-600 text-white font-bold px-7 py-4 rounded transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-orange-900/40">
                 ფასი მოითხოვე
@@ -144,75 +116,39 @@
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
             </a>
         </div>
-
-        <!-- Stats -->
         <div class="grid grid-cols-3 gap-6 max-w-sm pt-8 border-t border-white/10">
-            <div>
-                <div class="text-2xl font-black text-white">72სთ</div>
-                <div class="text-xs text-slate-400 mt-0.5 uppercase tracking-wide">ფასი</div>
-            </div>
-            <div>
-                <div class="text-2xl font-black text-white">50+</div>
-                <div class="text-xs text-slate-400 mt-0.5 uppercase tracking-wide">პროექტი</div>
-            </div>
-            <div>
-                <div class="text-2xl font-black text-white">EU</div>
-                <div class="text-xs text-slate-400 mt-0.5 uppercase tracking-wide">მასალა</div>
-            </div>
+            <div><div class="text-2xl font-black text-white">72სთ</div><div class="text-xs text-slate-400 mt-0.5 uppercase tracking-wide">ფასი</div></div>
+            <div><div class="text-2xl font-black text-white">50+</div><div class="text-xs text-slate-400 mt-0.5 uppercase tracking-wide">პროექტი</div></div>
+            <div><div class="text-2xl font-black text-white">EU</div><div class="text-xs text-slate-400 mt-0.5 uppercase tracking-wide">მასალა</div></div>
         </div>
     </div>
 </section>
 
-
-<!-- ── PROJECTS GALLERY ────────────────────────────────────── -->
+<!-- PROJECTS -->
 <section id="projects" class="py-20 bg-slate-50">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
-
         <div class="mb-12">
-            <div class="flex items-center gap-3 mb-2">
-                <div class="h-px w-8 bg-orange"></div>
-                <span class="text-xs font-bold text-orange uppercase tracking-widest">პროექტები</span>
-            </div>
+            <div class="flex items-center gap-3 mb-2"><div class="h-px w-8 bg-orange"></div><span class="text-xs font-bold text-orange uppercase tracking-widest">პროექტები</span></div>
             <h2 class="text-3xl lg:text-4xl font-black text-navy">ჩვენი შენობები</h2>
         </div>
-
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-
-            <!-- Image 1 -->
             <div class="img-box rounded overflow-hidden h-56 lg:h-64">
-                <img src="https://images.pexels.com/photos/32212309/pexels-photo-32212309/free-photo-of-industrial-warehouse-exterior-at-suyama-lumber-co.jpeg?auto=compress&cs=tinysrgb&w=800" alt="სამრეწველო საწყობი — სენდვიჩ პანელები"/>
-                <div class="absolute inset-0 flex items-end p-3 bg-gradient-to-t from-black/60 to-transparent">
-                    <span class="text-white text-xs font-semibold">სამრეწველო საწყობი</span>
-                </div>
+                <img src="https://images.pexels.com/photos/32212309/pexels-photo-32212309/free-photo-of-industrial-warehouse-exterior-at-suyama-lumber-co.jpeg?auto=compress&cs=tinysrgb&w=800" alt="სამრეწველო საწყობი"/>
+                <div class="absolute inset-0 flex items-end p-3 bg-gradient-to-t from-black/60 to-transparent"><span class="text-white text-xs font-semibold">სამრეწველო საწყობი</span></div>
             </div>
-
-            <!-- Image 2 -->
             <div class="img-box rounded overflow-hidden h-56 lg:h-64">
                 <img src="https://images.pexels.com/photos/13261149/pexels-photo-13261149.jpeg?auto=compress&cs=tinysrgb&w=800" alt="ფოლადის კარკასი მშენებლობაში"/>
-                <div class="absolute inset-0 flex items-end p-3 bg-gradient-to-t from-black/60 to-transparent">
-                    <span class="text-white text-xs font-semibold">ფოლადის კარკასი</span>
-                </div>
+                <div class="absolute inset-0 flex items-end p-3 bg-gradient-to-t from-black/60 to-transparent"><span class="text-white text-xs font-semibold">ფოლადის კარკასი</span></div>
             </div>
-
-            <!-- Image 3 -->
             <div class="img-box rounded overflow-hidden h-56 lg:h-64">
                 <img src="https://images.pexels.com/photos/30762654/pexels-photo-30762654/free-photo-of-modern-industrial-building-in-a-rural-landscape.jpeg?auto=compress&cs=tinysrgb&w=800" alt="თანამედროვე სამრეწველო შენობა"/>
-                <div class="absolute inset-0 flex items-end p-3 bg-gradient-to-t from-black/60 to-transparent">
-                    <span class="text-white text-xs font-semibold">სამრეწველო კომპლექსი</span>
-                </div>
+                <div class="absolute inset-0 flex items-end p-3 bg-gradient-to-t from-black/60 to-transparent"><span class="text-white text-xs font-semibold">სამრეწველო კომპლექსი</span></div>
             </div>
-
-            <!-- Image 4 -->
             <div class="img-box rounded overflow-hidden h-56 lg:h-64">
                 <img src="https://images.pexels.com/photos/18289258/pexels-photo-18289258/free-photo-of-building-out-of-corrugated-metal.jpeg?auto=compress&cs=tinysrgb&w=800" alt="კორუგირებული ლითონის შენობა"/>
-                <div class="absolute inset-0 flex items-end p-3 bg-gradient-to-t from-black/60 to-transparent">
-                    <span class="text-white text-xs font-semibold">კომერციული შენობა</span>
-                </div>
+                <div class="absolute inset-0 flex items-end p-3 bg-gradient-to-t from-black/60 to-transparent"><span class="text-white text-xs font-semibold">კომერციული შენობა</span></div>
             </div>
-
         </div>
-
-        <!-- Building types -->
         <div class="grid md:grid-cols-2 gap-6 mt-8">
             <div class="bg-white border border-slate-200 rounded p-6 hover:border-navy hover:shadow-lg transition-all">
                 <span class="inline-block bg-orange text-white text-xs font-bold px-3 py-1 rounded uppercase tracking-wider mb-3">სამრეწველო</span>
@@ -235,32 +171,21 @@
                 </div>
             </div>
         </div>
-
     </div>
 </section>
 
-
-<!-- ── PRODUCTS ────────────────────────────────────────────── -->
+<!-- PRODUCTS -->
 <section id="products" class="py-20 bg-white">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
-
         <div class="mb-12">
-            <div class="flex items-center gap-3 mb-2">
-                <div class="h-px w-8 bg-orange"></div>
-                <span class="text-xs font-bold text-orange uppercase tracking-widest">პროდუქტები</span>
-            </div>
+            <div class="flex items-center gap-3 mb-2"><div class="h-px w-8 bg-orange"></div><span class="text-xs font-bold text-orange uppercase tracking-widest">პროდუქტები</span></div>
             <h2 class="text-3xl lg:text-4xl font-black text-navy mb-3">ყველაფერი ერთ პაკეტში</h2>
             <p class="text-slate-500 max-w-xl">ერთი შეკვეთა — ყველა კომპონენტი. პანელები, კარკასი, სამაგრები — ყველაფერი შეთანხმებული და მზად.</p>
         </div>
-
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-
             <div class="border border-slate-200 rounded p-5 hover:border-navy hover:shadow-lg transition-all group">
                 <div class="w-10 h-10 bg-navy/10 rounded flex items-center justify-center mb-4 group-hover:bg-navy transition-colors">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2" stroke-linecap="round" class="group-hover:[stroke:#fff]">
-                        <rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="18" rx="1"/>
-                        <line x1="10" y1="8" x2="14" y2="8"/><line x1="10" y1="13" x2="14" y2="13"/>
-                    </svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2" stroke-linecap="round" class="group-hover:[stroke:#fff]"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="18" rx="1"/><line x1="10" y1="8" x2="14" y2="8"/><line x1="10" y1="13" x2="14" y2="13"/></svg>
                 </div>
                 <h3 class="font-bold text-navy mb-2">კედლის პანელები</h3>
                 <p class="text-xs text-slate-500 leading-relaxed mb-3">PIR/PUR და Rockwool გამავსებელი. 40–200 მმ სისქე. U-მნიშვნელობა 0.10 W/m²K.</p>
@@ -270,13 +195,9 @@
                     <li class="flex gap-2"><span class="text-orange font-bold">✓</span> B-s1, d0 ხანძარი</li>
                 </ul>
             </div>
-
             <div class="border border-slate-200 rounded p-5 hover:border-navy hover:shadow-lg transition-all group">
                 <div class="w-10 h-10 bg-navy/10 rounded flex items-center justify-center mb-4 group-hover:bg-navy transition-colors">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:[stroke:#fff]">
-                        <polyline points="3 9 12 2 21 9"/><path d="M9 22V12h6v10"/>
-                        <line x1="3" y1="9" x2="3" y2="22"/><line x1="21" y1="9" x2="21" y2="22"/>
-                    </svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:[stroke:#fff]"><polyline points="3 9 12 2 21 9"/><path d="M9 22V12h6v10"/><line x1="3" y1="9" x2="3" y2="22"/><line x1="21" y1="9" x2="21" y2="22"/></svg>
                 </div>
                 <h3 class="font-bold text-navy mb-2">სახურავის პანელები</h3>
                 <p class="text-xs text-slate-500 leading-relaxed mb-3">კორუგირებული და standing-seam პროფილი. თბური გამოყოფა. წყალგაუმტარი.</p>
@@ -286,13 +207,9 @@
                     <li class="flex gap-2"><span class="text-orange font-bold">✓</span> მინ. დახრა 3°</li>
                 </ul>
             </div>
-
             <div class="border border-slate-200 rounded p-5 hover:border-navy hover:shadow-lg transition-all group">
                 <div class="w-10 h-10 bg-navy/10 rounded flex items-center justify-center mb-4 group-hover:bg-navy transition-colors">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:[stroke:#fff]">
-                        <rect x="2" y="7" width="20" height="4" rx="1"/><rect x="5" y="3" width="14" height="4" rx="1"/>
-                        <rect x="5" y="17" width="14" height="4" rx="1"/><line x1="12" y1="11" x2="12" y2="17"/>
-                    </svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:[stroke:#fff]"><rect x="2" y="7" width="20" height="4" rx="1"/><rect x="5" y="3" width="14" height="4" rx="1"/><rect x="5" y="17" width="14" height="4" rx="1"/><line x1="12" y1="11" x2="12" y2="17"/></svg>
                 </div>
                 <h3 class="font-bold text-navy mb-2">ფოლადის კარკასი</h3>
                 <p class="text-xs text-slate-500 leading-relaxed mb-3">S355 ცხელად ნაგლინი სვეტები. ცივად ნაგლინი პურლინები. წინასწარ ნახვრეტებული.</p>
@@ -302,13 +219,9 @@
                     <li class="flex gap-2"><span class="text-orange font-bold">✓</span> EC3 სტანდარტი</li>
                 </ul>
             </div>
-
             <div class="border border-slate-200 rounded p-5 hover:border-navy hover:shadow-lg transition-all group">
                 <div class="w-10 h-10 bg-navy/10 rounded flex items-center justify-center mb-4 group-hover:bg-navy transition-colors">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:[stroke:#fff]">
-                        <path d="M12 22V8"/><path d="m20 12-8-4-8 4"/>
-                        <path d="m20 17-8 5-8-5"/>
-                    </svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:[stroke:#fff]"><path d="M12 22V8"/><path d="m20 12-8-4-8 4"/><path d="m20 17-8 5-8-5"/></svg>
                 </div>
                 <h3 class="font-bold text-navy mb-2">სამაგრი ელემენტები</h3>
                 <p class="text-xs text-slate-500 leading-relaxed mb-3">RAL შეფერილი ფლეშინგები, კუთხეები, ყდე-ორომტრიალი, სახურავის ქედი.</p>
@@ -318,239 +231,127 @@
                     <li class="flex gap-2"><span class="text-orange font-bold">✓</span> დასრულება სრულად</li>
                 </ul>
             </div>
-
         </div>
     </div>
 </section>
 
-
-<!-- ── WHY US ───────────────────────────────────────────────── -->
+<!-- WHY US -->
 <section id="why" class="py-20 bg-navy">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
-
         <div class="mb-12 text-center">
-            <div class="flex items-center justify-center gap-3 mb-2">
-                <div class="h-px w-8 bg-orange"></div>
-                <span class="text-xs font-bold text-orange uppercase tracking-widest">უპირატესობები</span>
-                <div class="h-px w-8 bg-orange"></div>
-            </div>
+            <div class="flex items-center justify-center gap-3 mb-2"><div class="h-px w-8 bg-orange"></div><span class="text-xs font-bold text-orange uppercase tracking-widest">უპირატესობები</span><div class="h-px w-8 bg-orange"></div></div>
             <h2 class="text-3xl lg:text-4xl font-black text-white">რატომ Velocity Build?</h2>
         </div>
-
         <div class="grid md:grid-cols-3 gap-6">
-
             <div class="bg-white/5 border border-white/10 rounded p-6 hover:bg-white/10 transition-all group">
                 <div class="w-12 h-12 bg-orange/20 rounded flex items-center justify-center mb-5 group-hover:bg-orange transition-colors">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="1.8" stroke-linecap="round" class="group-hover:[stroke:#fff]">
-                        <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
-                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-                    </svg>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="1.8" stroke-linecap="round" class="group-hover:[stroke:#fff]"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
                 </div>
                 <h3 class="text-lg font-bold text-white mb-2">გლობალური მასალები</h3>
                 <p class="text-slate-400 text-sm leading-relaxed">ევროპული სტანდარტის ქარხნებიდან. CE სერთიფიკატი, ქარხნული ტესტები, სრული თვალყური.</p>
             </div>
-
             <div class="bg-white/5 border border-white/10 rounded p-6 hover:bg-white/10 transition-all group">
                 <div class="w-12 h-12 bg-orange/20 rounded flex items-center justify-center mb-5 group-hover:bg-orange transition-colors">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="1.8" stroke-linecap="round" class="group-hover:[stroke:#fff]">
-                        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-                    </svg>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="1.8" stroke-linecap="round" class="group-hover:[stroke:#fff]"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                 </div>
                 <h3 class="text-lg font-bold text-white mb-2">სწრაფი მონტაჟი</h3>
                 <p class="text-slate-400 text-sm leading-relaxed">1 000 მ² შენობა 5 სამუშაო დღეში. სპეციალიზებული ოსტატები არ სჭირდება. სრული მონტაჟის სახელმძღვანელო.</p>
             </div>
-
             <div class="bg-white/5 border border-white/10 rounded p-6 hover:bg-white/10 transition-all group">
                 <div class="w-12 h-12 bg-orange/20 rounded flex items-center justify-center mb-5 group-hover:bg-orange transition-colors">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="1.8" stroke-linecap="round" class="group-hover:[stroke:#fff]">
-                        <path d="M12 22a9 9 0 0 1-9-9c0-4.97 9-13 9-13s9 8.03 9 13a9 9 0 0 1-9 9z"/>
-                    </svg>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="1.8" stroke-linecap="round" class="group-hover:[stroke:#fff]"><path d="M12 22a9 9 0 0 1-9-9c0-4.97 9-13 9-13s9 8.03 9 13a9 9 0 0 1-9 9z"/></svg>
                 </div>
                 <h3 class="text-lg font-bold text-white mb-2">თბო და ხანძარმედეგობა</h3>
                 <p class="text-slate-400 text-sm leading-relaxed">REI 60/120 ხანძარმდგრადობა. U-მნიშვნელობა 0.10 W/m²K. 40%-მდე ენერგიის დაზოგვა.</p>
             </div>
-
         </div>
     </div>
 </section>
 
-
-<!-- ── QUOTE FORM ───────────────────────────────────────────── -->
+<!-- QUOTE -->
 <section id="quote" class="py-20 bg-white">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
         <div class="grid lg:grid-cols-2 gap-14 items-start">
-
-            <!-- Left -->
             <div>
-                <div class="flex items-center gap-3 mb-2">
-                    <div class="h-px w-8 bg-orange"></div>
-                    <span class="text-xs font-bold text-orange uppercase tracking-widest">ფასი</span>
-                </div>
+                <div class="flex items-center gap-3 mb-2"><div class="h-px w-8 bg-orange"></div><span class="text-xs font-bold text-orange uppercase tracking-widest">ფასი</span></div>
                 <h2 class="text-3xl lg:text-4xl font-black text-navy mb-4">ფასი 72 საათში</h2>
                 <p class="text-slate-500 leading-relaxed mb-8">შეავსე ფორმა. ჩვენი გუნდი განიხილავს შენი პროექტის მოთხოვნებს და 72 საათში გამოგიგზავნის დეტალურ პრელიმინარულ ფასს.</p>
-
                 <div class="space-y-4 mb-8">
                     <div class="flex gap-3"><div class="w-7 h-7 bg-orange text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">1</div><div><div class="font-semibold text-navy text-sm">მოთხოვნის გაგზავნა</div><div class="text-xs text-slate-500">ზომები, მდებარეობა, პაკეტის ტიპი</div></div></div>
                     <div class="flex gap-3"><div class="w-7 h-7 bg-orange text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">2</div><div><div class="font-semibold text-navy text-sm">ინჟინრების მიმოხილვა</div><div class="text-xs text-slate-500">პანელების სპეციფიკაცია და კარკასის გაანგარიშება</div></div></div>
                     <div class="flex gap-3"><div class="w-7 h-7 bg-orange text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">3</div><div><div class="font-semibold text-navy text-sm">ფასი 72 საათში</div><div class="text-xs text-slate-500">დეტალური შეთავაზება ფასებით</div></div></div>
                 </div>
-
                 <div class="bg-slate-50 border border-slate-200 rounded p-4">
                     <div class="text-sm font-semibold text-navy mb-2">პირდაპირ დაგვიკავშირდით:</div>
-                    <a href="tel:+18000000000" class="flex items-center gap-2 text-sm text-slate-600 hover:text-navy mb-1.5">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                        +1 (800) 000-0000
-                    </a>
-                    <a href="mailto:info@velocitybuild.com" class="flex items-center gap-2 text-sm text-slate-600 hover:text-navy">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                        info@velocitybuild.com
-                    </a>
+                    <a href="tel:+18000000000" class="flex items-center gap-2 text-sm text-slate-600 hover:text-navy mb-1.5"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>+1 (800) 000-0000</a>
+                    <a href="mailto:info@velocitybuild.com" class="flex items-center gap-2 text-sm text-slate-600 hover:text-navy"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>info@velocitybuild.com</a>
                 </div>
             </div>
-
-            <!-- Right: form -->
             <div class="bg-white border border-slate-200 rounded shadow-xl shadow-slate-100 p-7">
                 <h3 class="text-lg font-bold text-navy mb-5">პროექტის ფორმა</h3>
-
                 <form id="quote-form" class="space-y-4" onsubmit="handleSubmit(event)" novalidate>
                     <div class="grid sm:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">სახელი *</label>
-                            <input type="text" required placeholder="გიორგი ბერიძე" class="vb-input w-full border border-slate-300 rounded px-3.5 py-2.5 text-sm placeholder-slate-400 hover:border-slate-400 transition-all"/>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">კომპანია *</label>
-                            <input type="text" required placeholder="შპს კომპანია" class="vb-input w-full border border-slate-300 rounded px-3.5 py-2.5 text-sm placeholder-slate-400 hover:border-slate-400 transition-all"/>
-                        </div>
+                        <div><label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">სახელი *</label><input type="text" required placeholder="გიორგი ბერიძე" class="vb-input w-full border border-slate-300 rounded px-3.5 py-2.5 text-sm placeholder-slate-400 hover:border-slate-400 transition-all"/></div>
+                        <div><label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">კომპანია *</label><input type="text" required placeholder="შპს კომპანია" class="vb-input w-full border border-slate-300 rounded px-3.5 py-2.5 text-sm placeholder-slate-400 hover:border-slate-400 transition-all"/></div>
                     </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">მდებარეობა *</label>
-                        <input type="text" required placeholder="თბილისი, საქართველო" class="vb-input w-full border border-slate-300 rounded px-3.5 py-2.5 text-sm placeholder-slate-400 hover:border-slate-400 transition-all"/>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">ფართობი (მ²) *</label>
-                        <input type="number" required placeholder="მაგ. 1500" min="50" class="vb-input w-full border border-slate-300 rounded px-3.5 py-2.5 text-sm placeholder-slate-400 hover:border-slate-400 transition-all"/>
-                    </div>
-
+                    <div><label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">მდებარეობა *</label><input type="text" required placeholder="თბილისი, საქართველო" class="vb-input w-full border border-slate-300 rounded px-3.5 py-2.5 text-sm placeholder-slate-400 hover:border-slate-400 transition-all"/></div>
+                    <div><label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">ფართობი (მ²) *</label><input type="number" required placeholder="მაგ. 1500" min="50" class="vb-input w-full border border-slate-300 rounded px-3.5 py-2.5 text-sm placeholder-slate-400 hover:border-slate-400 transition-all"/></div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">პაკეტის ტიპი *</label>
                         <div class="grid grid-cols-2 gap-3">
-                            <div class="pkg-card" onclick="selectPkg(this,'panels')">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="1.8" stroke-linecap="round" class="mx-auto mb-1.5"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="18" rx="1"/></svg>
-                                <div class="text-xs font-bold text-slate-700">პანელები მარტო</div>
-                                <div class="text-xs text-slate-400">პანელი + სამაგრები</div>
-                            </div>
-                            <div class="pkg-card active" onclick="selectPkg(this,'full')">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                                <div class="text-xs font-bold text-navy">სრული პაკეტი</div>
-                                <div class="text-xs text-slate-400">კარკასი + ყველაფერი</div>
-                            </div>
+                            <div class="pkg-card" onclick="selectPkg(this,'panels')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="1.8" stroke-linecap="round" class="mx-auto mb-1.5"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="18" rx="1"/></svg><div class="text-xs font-bold text-slate-700">პანელები მარტო</div><div class="text-xs text-slate-400">პანელი + სამაგრები</div></div>
+                            <div class="pkg-card active" onclick="selectPkg(this,'full')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><div class="text-xs font-bold text-navy">სრული პაკეტი</div><div class="text-xs text-slate-400">კარკასი + ყველაფერი</div></div>
                         </div>
                         <input type="hidden" id="pkg-val" value="full"/>
                     </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">შენიშვნა</label>
-                        <textarea rows="2" placeholder="სიმაღლე, სპეციალური მოთხოვნები..." class="vb-input w-full border border-slate-300 rounded px-3.5 py-2.5 text-sm placeholder-slate-400 hover:border-slate-400 transition-all resize-none"></textarea>
-                    </div>
-
-                    <button type="submit" class="w-full bg-orange hover:bg-orange-600 text-white font-bold py-3.5 rounded transition-all hover:-translate-y-px hover:shadow-lg flex items-center justify-center gap-2">
-                        ფასი მოვითხოვ — 72 საათში
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                    </button>
+                    <div><label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">შენიშვნა</label><textarea rows="2" placeholder="სიმაღლე, სპეციალური მოთხოვნები..." class="vb-input w-full border border-slate-300 rounded px-3.5 py-2.5 text-sm placeholder-slate-400 hover:border-slate-400 transition-all resize-none"></textarea></div>
+                    <button type="submit" class="w-full bg-orange hover:bg-orange-600 text-white font-bold py-3.5 rounded transition-all hover:-translate-y-px hover:shadow-lg flex items-center justify-center gap-2">ფასი მოვითხოვ — 72 საათში <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
                     <p class="text-xs text-slate-400 text-center">მონაცემები კონფიდენციალურია. მესამე მხარეს არ გადაეცემა.</p>
                 </form>
-
                 <div id="form-success" class="hidden text-center py-8">
-                    <div class="w-14 h-14 bg-green-50 border border-green-200 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-                    </div>
+                    <div class="w-14 h-14 bg-green-50 border border-green-200 rounded-full flex items-center justify-center mx-auto mb-3"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
                     <h4 class="text-lg font-bold text-navy mb-1">გაგზავნილია!</h4>
                     <p class="text-sm text-slate-500">72 საათში მოგვწერთ დეტალური ფასით.</p>
                 </div>
             </div>
-
         </div>
     </div>
 </section>
 
-
-<!-- ── FOOTER ───────────────────────────────────────────────── -->
+<!-- FOOTER -->
 <footer class="bg-ink text-white py-10">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
-
             <div class="sm:col-span-2 lg:col-span-1">
-                <div class="flex items-center gap-2 mb-3">
-                    <div class="w-7 h-7 bg-navy rounded flex items-center justify-center">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                    </div>
-                    <span class="font-black">Velocity<span class="text-orange">Build</span></span>
-                </div>
+                <div class="flex items-center gap-2 mb-3"><div class="w-7 h-7 bg-navy rounded flex items-center justify-center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span class="font-black">Velocity<span class="text-orange">Build</span></span></div>
                 <p class="text-sm text-slate-400">სწრაფი მშენებლობა. პრემიუმ იზოლაცია.</p>
             </div>
-
-            <div>
-                <h4 class="text-xs font-bold uppercase tracking-widest mb-4">გადაწყვეტილებები</h4>
-                <ul class="space-y-2 text-sm text-slate-400">
-                    <li><a href="#projects" class="hover:text-orange transition-colors">სამრეწველო საწყობები</a></li>
-                    <li><a href="#projects" class="hover:text-orange transition-colors">კომერციული შენობები</a></li>
-                    <li><a href="#" class="hover:text-orange transition-colors">ცივი საწყობები</a></li>
-                    <li><a href="#" class="hover:text-orange transition-colors">სასოფლო-სამეურნეო</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h4 class="text-xs font-bold uppercase tracking-widest mb-4">პროდუქტები</h4>
-                <ul class="space-y-2 text-sm text-slate-400">
-                    <li><a href="#products" class="hover:text-orange transition-colors">კედლის პანელები</a></li>
-                    <li><a href="#products" class="hover:text-orange transition-colors">სახურავის პანელები</a></li>
-                    <li><a href="#products" class="hover:text-orange transition-colors">ფოლადის კარკასი</a></li>
-                    <li><a href="#products" class="hover:text-orange transition-colors">სამაგრი ელემენტები</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h4 class="text-xs font-bold uppercase tracking-widest mb-4">კონტაქტი</h4>
-                <ul class="space-y-3 text-sm text-slate-400">
-                    <li class="flex items-center gap-2"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>+1 (800) 000-0000</li>
-                    <li class="flex items-center gap-2"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>info@velocitybuild.com</li>
-                </ul>
-            </div>
-
+            <div><h4 class="text-xs font-bold uppercase tracking-widest mb-4">გადაწყვეტილებები</h4><ul class="space-y-2 text-sm text-slate-400"><li><a href="#projects" class="hover:text-orange transition-colors">სამრეწველო საწყობები</a></li><li><a href="#projects" class="hover:text-orange transition-colors">კომერციული შენობები</a></li><li><a href="#" class="hover:text-orange transition-colors">ცივი საწყობები</a></li><li><a href="#" class="hover:text-orange transition-colors">სასოფლო-სამეურნეო</a></li></ul></div>
+            <div><h4 class="text-xs font-bold uppercase tracking-widest mb-4">პროდუქტები</h4><ul class="space-y-2 text-sm text-slate-400"><li><a href="#products" class="hover:text-orange transition-colors">კედლის პანელები</a></li><li><a href="#products" class="hover:text-orange transition-colors">სახურავის პანელები</a></li><li><a href="#products" class="hover:text-orange transition-colors">ფოლადის კარკასი</a></li><li><a href="#products" class="hover:text-orange transition-colors">სამაგრი ელემენტები</a></li></ul></div>
+            <div><h4 class="text-xs font-bold uppercase tracking-widest mb-4">კონტაქტი</h4><ul class="space-y-3 text-sm text-slate-400"><li class="flex items-center gap-2"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>+1 (800) 000-0000</li><li class="flex items-center gap-2"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>info@velocitybuild.com</li></ul></div>
         </div>
         <div class="border-t border-white/10 pt-6 flex flex-col sm:flex-row justify-between gap-2 text-xs text-slate-500">
-            <p>© 2025 Velocity Build. ყველა უფლება დაცულია.</p>
+            <p>&copy; 2025 Velocity Build. ყველა უფლება დაცულია.</p>
             <div class="flex gap-4"><a href="#" class="hover:text-slate-300">კონფიდენციალურობა</a><a href="#" class="hover:text-slate-300">პირობები</a></div>
         </div>
     </div>
 </footer>
 
-
 <script>
-    // Mobile menu
     document.getElementById('hamburger').addEventListener('click', () =>
         document.getElementById('mobile-menu').classList.toggle('open'));
     document.querySelectorAll('#mobile-menu a').forEach(a =>
         a.addEventListener('click', () => document.getElementById('mobile-menu').classList.remove('open')));
-
-    // Package selector
     function selectPkg(el, val) {
         document.querySelectorAll('.pkg-card').forEach(c => c.classList.remove('active'));
         el.classList.add('active');
         document.getElementById('pkg-val').value = val;
     }
-
-    // Form submit
     function handleSubmit(e) {
         e.preventDefault();
         document.getElementById('quote-form').classList.add('hidden');
         document.getElementById('form-success').classList.remove('hidden');
     }
-
-    // Smooth scroll
     document.querySelectorAll('a[href^="#"]').forEach(a => {
         a.addEventListener('click', e => {
             const t = document.querySelector(a.getAttribute('href'));
@@ -558,6 +359,5 @@
         });
     });
 </script>
-
 </body>
 </html>
