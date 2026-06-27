@@ -239,65 +239,67 @@
             </div>
         </div>
 
-        <!-- Video area -->
-        <div class="flex-1 relative bg-black overflow-hidden">
-            <!-- Placeholder -->
-            <div id="p-placeholder" class="absolute inset-0 flex flex-col items-center justify-center gap-5" style="background:#080812;">
+        <!-- Main area -->
+        <div class="flex-1 relative overflow-hidden">
+
+            <!-- Empty state -->
+            <div id="p-placeholder" class="absolute inset-0 flex flex-col items-center justify-center gap-5 px-8" style="background:#080812;">
                 <div class="w-24 h-24 rounded-full flex items-center justify-center" style="background:rgba(124,58,237,0.12);border:2px solid rgba(124,58,237,0.28);">
                     <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="1.4" stroke-linecap="round">
                         <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
                     </svg>
                 </div>
-                <div class="text-center px-8">
+                <div class="text-center">
                     <div class="text-white font-semibold text-lg mb-1">No song loaded</div>
-                    <div class="text-slate-500 text-sm">Pick a song from Home, or add a YouTube karaoke URL</div>
+                    <div class="text-slate-500 text-sm">Pick a song from Home to get started</div>
                 </div>
                 <button onclick="goScreen('home')" class="kbtn-grad" style="width:auto;padding:14px 32px;">Browse Songs</button>
             </div>
-            <!-- YouTube iframe -->
-            <iframe id="yt-frame" class="hidden absolute inset-0 w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="border:none;"></iframe>
-            <!-- Fallback when video can't embed -->
-            <div id="yt-fallback" class="hidden absolute inset-0 flex flex-col items-center justify-center gap-5 px-8" style="background:#080812;">
-                <div class="w-20 h-20 rounded-full flex items-center justify-center" style="background:rgba(239,68,68,0.1);border:2px solid rgba(239,68,68,0.25);">
-                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+
+            <!-- Now Playing card (library songs) -->
+            <div id="p-nowplaying" class="hidden absolute inset-0 flex flex-col items-center justify-center gap-5 px-6 overflow-y-auto" style="background:linear-gradient(160deg,#080812 0%,#100820 50%,#080812 100%);">
+                <div class="w-32 h-32 rounded-full flex items-center justify-center flex-shrink-0" style="background:linear-gradient(135deg,rgba(124,58,237,0.3),rgba(236,72,153,0.3));border:2px solid rgba(124,58,237,0.45);box-shadow:0 0 80px rgba(124,58,237,0.25);">
+                    <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="1.2" stroke-linecap="round">
+                        <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+                    </svg>
                 </div>
-                <div class="text-center">
-                    <div class="text-white font-bold text-lg mb-1">Video can't be embedded</div>
-                    <div class="text-slate-400 text-sm">This karaoke video blocks in-app playback. Open it on YouTube instead.</div>
+                <div class="text-center w-full">
+                    <div id="np-title" class="text-2xl font-black text-white mb-1 leading-tight px-2">—</div>
+                    <div id="np-artist" class="text-base text-purple-300">—</div>
                 </div>
-                <a id="yt-fallback-link" href="#" target="_blank" rel="noopener" class="kbtn-grad flex items-center gap-2" style="width:auto;padding:14px 28px;text-decoration:none;">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.75a8.28 8.28 0 0 0 4.84 1.55V6.87a4.85 4.85 0 0 1-1.07-.18z"/></svg>
-                    Find on YouTube
+                <a id="np-yt-link" href="#" target="_blank" rel="noopener" class="kbtn-grad flex items-center justify-center gap-2.5 w-full" style="text-decoration:none;padding:18px;font-size:16px;max-width:320px;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    Open Karaoke on YouTube
                 </a>
-                <button onclick="skipFallback()" class="text-xs text-slate-600 underline">Skip — mark as playing anyway</button>
+                <div class="w-full max-w-xs px-4 py-3 rounded-2xl text-center" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);">
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        Open YouTube on your phone, then use <strong class="text-slate-400">Screen Mirroring</strong> or <strong class="text-slate-400">AirPlay</strong> to show karaoke lyrics on your car screen while the app manages the queue.
+                    </p>
+                </div>
+            </div>
+
+            <!-- iframe (custom songs only — user-pasted embeddable URLs) -->
+            <iframe id="yt-frame" class="hidden absolute inset-0 w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="border:none;"></iframe>
+
+            <!-- Embed blocked fallback for custom songs -->
+            <div id="yt-fallback" class="hidden absolute inset-0 flex flex-col items-center justify-center gap-4 px-8" style="background:#080812;">
+                <div class="text-center">
+                    <div class="text-white font-semibold mb-1">Can't embed this video</div>
+                    <div class="text-slate-500 text-sm">The video owner disabled in-app playback.</div>
+                </div>
+                <a id="yt-fallback-link" href="#" target="_blank" rel="noopener" class="kbtn-outline flex items-center gap-2" style="width:auto;padding:12px 24px;text-decoration:none;">Open on YouTube</a>
+                <button onclick="showNowPlaying()" class="text-xs text-slate-600 underline">Go back to Now Playing</button>
             </div>
         </div>
 
         <!-- Mic visualizer -->
-        <div id="mic-viz" class="hidden flex-shrink-0 px-3 py-2" style="background:rgba(4,4,10,0.95);">
-            <canvas id="mic-canvas" height="52" class="w-full rounded-xl" style="height:52px;display:block;"></canvas>
-        </div>
-
-        <!-- Volume controls -->
-        <div class="flex-shrink-0 px-4 pt-3 pb-2" style="background:rgba(4,4,10,0.97);border-top:1px solid rgba(255,255,255,0.05);">
-            <div class="flex gap-5">
-                <div class="flex-1">
-                    <div class="flex items-center gap-1.5 mb-2">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2.5" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Music</span>
-                        <span id="music-vol-label" class="text-xs text-slate-600 ml-auto">100</span>
-                    </div>
-                    <input id="music-vol" type="range" min="0" max="100" value="100" oninput="setMusicVol(this.value)" class="vol-slider">
-                </div>
-                <div class="flex-1">
-                    <div class="flex items-center gap-1.5 mb-2">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="2.5" stroke-linecap="round"><path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
-                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Voice</span>
-                        <span id="voice-vol-label" class="text-xs text-slate-600 ml-auto">0</span>
-                    </div>
-                    <input id="voice-vol" type="range" min="0" max="100" value="0" oninput="setVoiceVol(this.value)" class="vol-slider">
-                </div>
+        <div id="mic-viz" class="hidden flex-shrink-0 px-3 py-2" style="background:rgba(4,4,10,0.95);border-top:1px solid rgba(255,255,255,0.05);">
+            <div class="flex items-center gap-2 mb-1.5">
+                <span class="text-xs font-bold text-pink-500 uppercase tracking-wider">Mic Level</span>
+                <span class="text-xs text-slate-600 ml-auto">Sensitivity</span>
+                <input id="mic-sens" type="range" min="1" max="5" value="2" oninput="setMicSens(this.value)" class="vol-slider" style="width:80px;">
             </div>
+            <canvas id="mic-canvas" height="44" class="w-full rounded-xl" style="height:44px;display:block;"></canvas>
         </div>
 
         <!-- Controls bar -->
@@ -445,10 +447,8 @@ const S = {
     micStream: null,
     audioCtx: null,
     analyser: null,
-    gainNode: null,
     rafId: null,
-    musicVol: 100,
-    voiceVol: 0,
+    micSens: 2,
     carMode: false,
 };
 
@@ -583,24 +583,42 @@ function doAddQueue() {
 function playSong(song) {
     S.current = song;
     const frame = document.getElementById('yt-frame');
-    const ph    = document.getElementById('p-placeholder');
-    const fb    = document.getElementById('yt-fallback');
-    const q = encodeURIComponent(`${song.title} ${song.artist} karaoke lyrics`);
-    document.getElementById('yt-fallback-link').href = `https://www.youtube.com/results?search_query=${q}`;
-    fb.classList.add('hidden');
-    frame.src = `https://www.youtube.com/embed/${song.ytId}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3&enablejsapi=1`;
-    setTimeout(() => applyMusicVol(), 2000);
-    frame.classList.remove('hidden');
-    ph.classList.add('hidden');
+    ['p-placeholder','p-nowplaying','yt-fallback'].forEach(id => document.getElementById(id).classList.add('hidden'));
+    frame.classList.add('hidden');
+    frame.src = '';
+
+    if (song.genre === 'custom') {
+        // User-pasted URL — attempt iframe embed
+        const q = encodeURIComponent(`${song.title} ${song.artist} karaoke`);
+        document.getElementById('yt-fallback-link').href = `https://www.youtube.com/results?search_query=${q}`;
+        frame.src = `https://www.youtube.com/embed/${song.ytId}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3&enablejsapi=1`;
+        frame.classList.remove('hidden');
+        // postMessage volume is handled by YouTube's own controls for custom songs
+    } else {
+        // Library song — show Now Playing card with direct YouTube link
+        document.getElementById('np-title').textContent = song.title;
+        document.getElementById('np-artist').textContent = song.artist;
+        document.getElementById('np-yt-link').href = `https://www.youtube.com/watch?v=${song.ytId}`;
+        document.getElementById('p-nowplaying').classList.remove('hidden');
+    }
+
     document.getElementById('p-title').textContent = song.title;
     document.getElementById('p-artist').textContent = song.artist;
     document.getElementById('eq-bars').classList.remove('off');
     updateSingingNow();
 }
 
-function skipFallback() {
-    document.getElementById('yt-fallback').classList.add('hidden');
-    document.getElementById('p-placeholder').classList.remove('hidden');
+function showNowPlaying() {
+    ['yt-frame','yt-fallback'].forEach(id => document.getElementById(id).classList.add('hidden'));
+    document.getElementById('yt-frame').src = '';
+    if (S.current) {
+        document.getElementById('np-title').textContent = S.current.title;
+        document.getElementById('np-artist').textContent = S.current.artist;
+        document.getElementById('np-yt-link').href = `https://www.youtube.com/watch?v=${S.current.ytId}`;
+        document.getElementById('p-nowplaying').classList.remove('hidden');
+    } else {
+        document.getElementById('p-placeholder').classList.remove('hidden');
+    }
 }
 
 function playNext() {
@@ -754,12 +772,9 @@ async function startMic() {
         S.audioCtx  = new (window.AudioContext || window.webkitAudioContext)();
         S.analyser  = S.audioCtx.createAnalyser();
         S.analyser.fftSize = 256;
-        S.gainNode  = S.audioCtx.createGain();
-        S.gainNode.gain.value = S.voiceVol / 100;
-        const src = S.audioCtx.createMediaStreamSource(stream);
-        src.connect(S.analyser);
-        src.connect(S.gainNode);
-        S.gainNode.connect(S.audioCtx.destination);
+        // Only visualise — no routing to destination, which would trigger
+        // iOS Bluetooth HFP (call profile) and cause voice echo.
+        S.audioCtx.createMediaStreamSource(stream).connect(S.analyser);
         S.micActive = true;
         document.getElementById('mic-btn').classList.add('mic-on');
         document.getElementById('mic-viz').classList.remove('hidden');
@@ -776,7 +791,6 @@ function stopMic() {
     if (S.audioCtx) { S.audioCtx.close(); S.audioCtx = null; }
     if (S.rafId) { cancelAnimationFrame(S.rafId); S.rafId = null; }
     S.analyser = null;
-    S.gainNode = null;
     S.micActive = false;
     document.getElementById('mic-btn').classList.remove('mic-on');
     document.getElementById('mic-viz').classList.add('hidden');
@@ -799,7 +813,7 @@ function drawMic() {
         const bw = (W / buf.length) * 2.5;
         let x = 0;
         for (let i = 0; i < buf.length; i++) {
-            const bh = (buf[i] / 255) * H;
+            const bh = Math.min((buf[i] / 255) * S.micSens, 1) * H;
             const g  = ctx.createLinearGradient(0, H - bh, 0, H);
             g.addColorStop(0, '#ec4899'); g.addColorStop(1, '#7c3aed');
             ctx.fillStyle = g;
@@ -827,26 +841,10 @@ function toggleCarMode() {
 }
 
 // ════════════════════════════════════════════════════════
-// VOLUME
+// MIC SENSITIVITY
 // ════════════════════════════════════════════════════════
-function applyMusicVol() {
-    const frame = document.getElementById('yt-frame');
-    if (!frame || frame.classList.contains('hidden')) return;
-    try {
-        frame.contentWindow.postMessage(JSON.stringify({ event:'command', func:'setVolume', args:[S.musicVol] }), 'https://www.youtube.com');
-    } catch(e) {}
-}
-
-function setMusicVol(v) {
-    S.musicVol = parseInt(v);
-    document.getElementById('music-vol-label').textContent = S.musicVol;
-    applyMusicVol();
-}
-
-function setVoiceVol(v) {
-    S.voiceVol = parseInt(v);
-    document.getElementById('voice-vol-label').textContent = S.voiceVol;
-    if (S.gainNode) S.gainNode.gain.value = S.voiceVol / 100;
+function setMicSens(v) {
+    S.micSens = parseFloat(v);
 }
 
 // ════════════════════════════════════════════════════════
