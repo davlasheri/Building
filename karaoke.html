@@ -126,6 +126,11 @@
         .schip { border-radius:100px; padding:8px 14px; font-size:12px; font-weight:600; white-space:nowrap; background:rgba(255,255,255,0.07); color:#94a3b8; border:1px solid transparent; }
         .schip.cur { background:rgba(124,58,237,0.28); color:#c4b5fd; border-color:rgba(124,58,237,0.45); }
 
+        /* ── Volume sliders ── */
+        .vol-slider { -webkit-appearance:none; appearance:none; width:100%; height:5px; border-radius:3px; background:rgba(255,255,255,0.1); outline:none; cursor:pointer; }
+        .vol-slider::-webkit-slider-thumb { -webkit-appearance:none; appearance:none; width:18px; height:18px; border-radius:50%; background:linear-gradient(135deg,#7c3aed,#ec4899); cursor:pointer; box-shadow:0 2px 8px rgba(124,58,237,0.5); }
+        .vol-slider::-moz-range-thumb { width:18px; height:18px; border-radius:50%; background:linear-gradient(135deg,#7c3aed,#ec4899); cursor:pointer; border:none; box-shadow:0 2px 8px rgba(124,58,237,0.5); }
+
         /* ── Car mode ── */
         body.car .song-card { padding-top:20px; padding-bottom:20px; }
         body.car #songs-list .text-sm { font-size:17px; }
@@ -154,13 +159,13 @@
                     <path d="M13 17H9"/>
                 </svg>
             </button>
-            <!-- Bluetooth button -->
-            <button id="bt-btn" onclick="toggleBluetooth()" title="Bluetooth" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all" style="background:rgba(255,255,255,0.07);color:#64748b;">
+            <!-- Bluetooth tip (static — connect via iOS Settings to keep A2DP stereo) -->
+            <div title="Connect audio via iOS Settings → Bluetooth" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold" style="background:rgba(255,255,255,0.05);color:#475569;cursor:default;" onclick="toast('Connect audio via iOS Settings → Bluetooth','info')">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="6.5 6.5 17.5 17.5 12 23 12 1 17.5 6.5 6.5 17.5"/>
                 </svg>
-                <span id="bt-label">BT</span>
-            </button>
+                <span>BT</span>
+            </div>
         </div>
     </div>
 
@@ -256,6 +261,28 @@
         <!-- Mic visualizer -->
         <div id="mic-viz" class="hidden flex-shrink-0 px-3 py-2" style="background:rgba(4,4,10,0.95);">
             <canvas id="mic-canvas" height="52" class="w-full rounded-xl" style="height:52px;display:block;"></canvas>
+        </div>
+
+        <!-- Volume controls -->
+        <div class="flex-shrink-0 px-4 pt-3 pb-2" style="background:rgba(4,4,10,0.97);border-top:1px solid rgba(255,255,255,0.05);">
+            <div class="flex gap-5">
+                <div class="flex-1">
+                    <div class="flex items-center gap-1.5 mb-2">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2.5" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Music</span>
+                        <span id="music-vol-label" class="text-xs text-slate-600 ml-auto">100</span>
+                    </div>
+                    <input id="music-vol" type="range" min="0" max="100" value="100" oninput="setMusicVol(this.value)" class="vol-slider">
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center gap-1.5 mb-2">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="2.5" stroke-linecap="round"><path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Voice</span>
+                        <span id="voice-vol-label" class="text-xs text-slate-600 ml-auto">0</span>
+                    </div>
+                    <input id="voice-vol" type="range" min="0" max="100" value="0" oninput="setVoiceVol(this.value)" class="vol-slider">
+                </div>
+            </div>
         </div>
 
         <!-- Controls bar -->
@@ -403,50 +430,49 @@ const S = {
     micStream: null,
     audioCtx: null,
     analyser: null,
+    gainNode: null,
     rafId: null,
-    btConnected: false,
+    musicVol: 100,
+    voiceVol: 0,
     carMode: false,
 };
 
 // ════════════════════════════════════════════════════════
-// SONG LIBRARY  (demo — real karaoke = paste YouTube URL)
+// SONG LIBRARY
 // ════════════════════════════════════════════════════════
-/* The YouTube IDs below are the original music videos used as a
-   visual demo of the player. For actual sing-along karaoke, tap
-   "Add Song from YouTube URL" and paste a karaoke video link. */
 const LIBRARY = [
-    { id:1,  title:"Shape of You",           artist:"Ed Sheeran",                 genre:"pop",     ytId:"JGwWNGJdvx8" },
-    { id:2,  title:"Someone Like You",        artist:"Adele",                      genre:"pop",     ytId:"hLQl3WQQoQ0" },
-    { id:3,  title:"Rolling in the Deep",     artist:"Adele",                      genre:"pop",     ytId:"rYEDA3JcQqw" },
-    { id:4,  title:"Blinding Lights",         artist:"The Weeknd",                 genre:"pop",     ytId:"4NRXx6U8ABQ" },
-    { id:5,  title:"Stay With Me",            artist:"Sam Smith",                  genre:"pop",     ytId:"pB-5XG-DbAA" },
-    { id:6,  title:"Shallow",                 artist:"Lady Gaga & Bradley Cooper", genre:"pop",     ytId:"bo_efYLyVK0" },
-    { id:7,  title:"bad guy",                 artist:"Billie Eilish",              genre:"pop",     ytId:"DyDfgMOUjCI" },
-    { id:8,  title:"Uptown Funk",             artist:"Mark Ronson ft. Bruno Mars", genre:"pop",     ytId:"OPf0YbXqDm0" },
-    { id:9,  title:"Bohemian Rhapsody",       artist:"Queen",                      genre:"rock",    ytId:"fJ9rUzIMcZQ" },
-    { id:10, title:"Sweet Home Alabama",      artist:"Lynyrd Skynyrd",             genre:"rock",    ytId:"ye5BuYf8q4o" },
-    { id:11, title:"Don't Stop Believin'",    artist:"Journey",                    genre:"rock",    ytId:"1k8craCGpgs" },
-    { id:12, title:"Mr. Brightside",          artist:"The Killers",                genre:"rock",    ytId:"gGdGFtwCNBE" },
-    { id:13, title:"Sweet Caroline",          artist:"Neil Diamond",               genre:"rock",    ytId:"1vhFnTjia_I" },
-    { id:14, title:"Wonderwall",              artist:"Oasis",                      genre:"rock",    ytId:"bx1Bh8ZvH84" },
-    { id:15, title:"Lose Yourself",           artist:"Eminem",                     genre:"hiphop",  ytId:"_Yhyp-_hX2s" },
-    { id:16, title:"HUMBLE.",                 artist:"Kendrick Lamar",             genre:"hiphop",  ytId:"tvTRZJ-4EyI" },
-    { id:17, title:"Sicko Mode",              artist:"Travis Scott",               genre:"hiphop",  ytId:"6ONRf7h3Mdk" },
-    { id:18, title:"Take On Me",              artist:"a-ha",                       genre:"80s",     ytId:"djV11Xbc914" },
-    { id:19, title:"Africa",                  artist:"Toto",                       genre:"80s",     ytId:"FTQbiNvZqaY" },
-    { id:20, title:"Livin' on a Prayer",      artist:"Bon Jovi",                   genre:"80s",     ytId:"lDK9QqIzhwk" },
-    { id:21, title:"Eye of the Tiger",        artist:"Survivor",                   genre:"80s",     ytId:"btPJPFnesV4" },
-    { id:22, title:"Girls Just Want to Fun",  artist:"Cyndi Lauper",               genre:"80s",     ytId:"PIb6AZdTr-A" },
-    { id:23, title:"I Will Always Love You",  artist:"Whitney Houston",            genre:"90s",     ytId:"3JWTaaS7LdU" },
-    { id:24, title:"Smells Like Teen Spirit", artist:"Nirvana",                    genre:"90s",     ytId:"hTWKbfoikeg" },
-    { id:25, title:"Baby One More Time",      artist:"Britney Spears",             genre:"90s",     ytId:"C-u5WLJ9Yk4" },
-    { id:26, title:"Friends in Low Places",   artist:"Garth Brooks",               genre:"country", ytId:"eQWG3-cKNFI" },
-    { id:27, title:"Jolene",                  artist:"Dolly Parton",               genre:"country", ytId:"Ixrje2rXLMA" },
-    { id:28, title:"Take Me Home, Country Roads", artist:"John Denver",            genre:"country", ytId:"1vrEljMfXYo" },
-    { id:29, title:"Crazy in Love",           artist:"Beyoncé",                    genre:"rnb",     ytId:"ViwtNLUqkMY" },
-    { id:30, title:"No Scrubs",               artist:"TLC",                        genre:"rnb",     ytId:"FrLequ6dUdM" },
-    { id:31, title:"Despacito",               artist:"Luis Fonsi ft. Daddy Yankee",genre:"latin",   ytId:"ktvTqknDobU" },
-    { id:32, title:"Waka Waka",               artist:"Shakira",                    genre:"latin",   ytId:"pRpeEdMmmQ0" },
+    { id:1,  title:"Shape of You",               artist:"Ed Sheeran",                 genre:"pop",     ytId:"o71_MatpYV0" },
+    { id:2,  title:"Someone Like You",            artist:"Adele",                      genre:"pop",     ytId:"_uORhCSX2f8" },
+    { id:3,  title:"Rolling in the Deep",         artist:"Adele",                      genre:"pop",     ytId:"LOd3u6FtkAk" },
+    { id:4,  title:"Blinding Lights",             artist:"The Weeknd",                 genre:"pop",     ytId:"Cj4hcXZs3Lc" },
+    { id:5,  title:"Stay With Me",                artist:"Sam Smith",                  genre:"pop",     ytId:"7C8034DlmIM" },
+    { id:6,  title:"Shallow",                     artist:"Lady Gaga & Bradley Cooper", genre:"pop",     ytId:"_nHT_k9Rswc" },
+    { id:7,  title:"bad guy",                     artist:"Billie Eilish",              genre:"pop",     ytId:"GsFlbMS7UIc" },
+    { id:8,  title:"Uptown Funk",                 artist:"Mark Ronson ft. Bruno Mars", genre:"pop",     ytId:"F3R6eJKAz4M" },
+    { id:9,  title:"Bohemian Rhapsody",           artist:"Queen",                      genre:"rock",    ytId:"9Lxm0iSnKNc" },
+    { id:10, title:"Sweet Home Alabama",          artist:"Lynyrd Skynyrd",             genre:"rock",    ytId:"ShMxICBtGNg" },
+    { id:11, title:"Don't Stop Believin'",        artist:"Journey",                    genre:"rock",    ytId:"c8wn2fMYvns" },
+    { id:12, title:"Mr. Brightside",              artist:"The Killers",                genre:"rock",    ytId:"c1X3Lg7RVkk" },
+    { id:13, title:"Sweet Caroline",              artist:"Neil Diamond",               genre:"rock",    ytId:"srLoAl1mhFw" },
+    { id:14, title:"Wonderwall",                  artist:"Oasis",                      genre:"rock",    ytId:"R_EXyGWI9rU" },
+    { id:15, title:"Lose Yourself",               artist:"Eminem",                     genre:"hiphop",  ytId:"F-p2BQ4H1nA" },
+    { id:16, title:"HUMBLE.",                     artist:"Kendrick Lamar",             genre:"hiphop",  ytId:"AnQESyZisU0" },
+    { id:17, title:"Sicko Mode",                  artist:"Travis Scott",               genre:"hiphop",  ytId:"TwuE8y667hg" },
+    { id:18, title:"Take On Me",                  artist:"a-ha",                       genre:"80s",     ytId:"bC4ER15Hj10" },
+    { id:19, title:"Africa",                      artist:"Toto",                       genre:"80s",     ytId:"CRrZlEF7-SU" },
+    { id:20, title:"Livin' on a Prayer",          artist:"Bon Jovi",                   genre:"80s",     ytId:"nsJ-j5wDX5c" },
+    { id:21, title:"Eye of the Tiger",            artist:"Survivor",                   genre:"80s",     ytId:"83ZFZPhxskc" },
+    { id:22, title:"Girls Just Want to Have Fun", artist:"Cyndi Lauper",               genre:"80s",     ytId:"-Fg7m1ZqkxI" },
+    { id:23, title:"I Will Always Love You",      artist:"Whitney Houston",            genre:"90s",     ytId:"8kotNQ07ZEw" },
+    { id:24, title:"Smells Like Teen Spirit",     artist:"Nirvana",                    genre:"90s",     ytId:"lMdvpJpaolE" },
+    { id:25, title:"Baby One More Time",          artist:"Britney Spears",             genre:"90s",     ytId:"PYpU2TxIzAM" },
+    { id:26, title:"Friends in Low Places",       artist:"Garth Brooks",               genre:"country", ytId:"MHGgUKGT3Vw" },
+    { id:27, title:"Jolene",                      artist:"Dolly Parton",               genre:"country", ytId:"r9lVYyhkqUU" },
+    { id:28, title:"Take Me Home, Country Roads", artist:"John Denver",                genre:"country", ytId:"l-VcTVtT3h8" },
+    { id:29, title:"Crazy in Love",               artist:"Beyoncé",                    genre:"rnb",     ytId:"-RwFOzjG6o0" },
+    { id:30, title:"No Scrubs",                   artist:"TLC",                        genre:"rnb",     ytId:"CUFIRtDz-Oo" },
+    { id:31, title:"Despacito",                   artist:"Luis Fonsi ft. Daddy Yankee",genre:"latin",   ytId:"jRpDuEgqQQQ" },
+    { id:32, title:"Waka Waka",                   artist:"Shakira",                    genre:"latin",   ytId:"TAKuexu97GI" },
 ];
 
 const GENRE_NAMES = { pop:'Pop', rock:'Rock', hiphop:'Hip-Hop', '80s':'80s', '90s':'90s', country:'Country', rnb:'R&B', latin:'Latin' };
@@ -543,7 +569,8 @@ function playSong(song) {
     S.current = song;
     const frame = document.getElementById('yt-frame');
     const ph    = document.getElementById('p-placeholder');
-    frame.src = `https://www.youtube.com/embed/${song.ytId}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3`;
+    frame.src = `https://www.youtube.com/embed/${song.ytId}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3&enablejsapi=1`;
+    setTimeout(() => applyMusicVol(), 2000);
     frame.classList.remove('hidden');
     ph.classList.add('hidden');
     document.getElementById('p-title').textContent = song.title;
@@ -703,7 +730,12 @@ async function startMic() {
         S.audioCtx  = new (window.AudioContext || window.webkitAudioContext)();
         S.analyser  = S.audioCtx.createAnalyser();
         S.analyser.fftSize = 256;
-        S.audioCtx.createMediaStreamSource(stream).connect(S.analyser);
+        S.gainNode  = S.audioCtx.createGain();
+        S.gainNode.gain.value = S.voiceVol / 100;
+        const src = S.audioCtx.createMediaStreamSource(stream);
+        src.connect(S.analyser);
+        src.connect(S.gainNode);
+        S.gainNode.connect(S.audioCtx.destination);
         S.micActive = true;
         document.getElementById('mic-btn').classList.add('mic-on');
         document.getElementById('mic-viz').classList.remove('hidden');
@@ -720,6 +752,7 @@ function stopMic() {
     if (S.audioCtx) { S.audioCtx.close(); S.audioCtx = null; }
     if (S.rafId) { cancelAnimationFrame(S.rafId); S.rafId = null; }
     S.analyser = null;
+    S.gainNode = null;
     S.micActive = false;
     document.getElementById('mic-btn').classList.remove('mic-on');
     document.getElementById('mic-viz').classList.add('hidden');
@@ -756,36 +789,6 @@ function drawMic() {
     draw();
 }
 
-// ════════════════════════════════════════════════════════
-// BLUETOOTH
-// ════════════════════════════════════════════════════════
-async function toggleBluetooth() {
-    if (S.btConnected) {
-        S.btConnected = false;
-        const b = document.getElementById('bt-btn');
-        b.style.background = 'rgba(255,255,255,0.07)';
-        b.style.color = '#64748b';
-        document.getElementById('bt-label').textContent = 'BT';
-        toast('Bluetooth disconnected', 'info');
-        return;
-    }
-    if ('bluetooth' in navigator) {
-        try {
-            toast('Scanning…', 'info');
-            const dev = await navigator.bluetooth.requestDevice({ acceptAllDevices: true });
-            S.btConnected = true;
-            const b = document.getElementById('bt-btn');
-            b.style.background = 'rgba(6,182,212,0.18)';
-            b.style.color = '#06b6d4';
-            document.getElementById('bt-label').textContent = dev.name || 'Connected';
-            toast(`Connected: ${dev.name || 'device'}`);
-        } catch(e) {
-            if (e.name !== 'NotFoundError') toast('BT failed', 'err');
-        }
-    } else {
-        toast('Connect audio via phone Settings → Bluetooth', 'info');
-    }
-}
 
 // ════════════════════════════════════════════════════════
 // CAR MODE (larger text, simplified UI)
@@ -797,6 +800,29 @@ function toggleCarMode() {
     btn.style.color     = S.carMode ? '#06b6d4' : '#475569';
     btn.style.background = S.carMode ? 'rgba(6,182,212,0.18)' : 'rgba(255,255,255,0.07)';
     toast(S.carMode ? 'Car Mode ON — bigger UI' : 'Car Mode OFF', 'info');
+}
+
+// ════════════════════════════════════════════════════════
+// VOLUME
+// ════════════════════════════════════════════════════════
+function applyMusicVol() {
+    const frame = document.getElementById('yt-frame');
+    if (!frame || frame.classList.contains('hidden')) return;
+    try {
+        frame.contentWindow.postMessage(JSON.stringify({ event:'command', func:'setVolume', args:[S.musicVol] }), 'https://www.youtube.com');
+    } catch(e) {}
+}
+
+function setMusicVol(v) {
+    S.musicVol = parseInt(v);
+    document.getElementById('music-vol-label').textContent = S.musicVol;
+    applyMusicVol();
+}
+
+function setVoiceVol(v) {
+    S.voiceVol = parseInt(v);
+    document.getElementById('voice-vol-label').textContent = S.voiceVol;
+    if (S.gainNode) S.gainNode.gain.value = S.voiceVol / 100;
 }
 
 // ════════════════════════════════════════════════════════
