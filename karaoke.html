@@ -256,6 +256,21 @@
             </div>
             <!-- YouTube iframe -->
             <iframe id="yt-frame" class="hidden absolute inset-0 w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="border:none;"></iframe>
+            <!-- Fallback when video can't embed -->
+            <div id="yt-fallback" class="hidden absolute inset-0 flex flex-col items-center justify-center gap-5 px-8" style="background:#080812;">
+                <div class="w-20 h-20 rounded-full flex items-center justify-center" style="background:rgba(239,68,68,0.1);border:2px solid rgba(239,68,68,0.25);">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                </div>
+                <div class="text-center">
+                    <div class="text-white font-bold text-lg mb-1">Video can't be embedded</div>
+                    <div class="text-slate-400 text-sm">This karaoke video blocks in-app playback. Open it on YouTube instead.</div>
+                </div>
+                <a id="yt-fallback-link" href="#" target="_blank" rel="noopener" class="kbtn-grad flex items-center gap-2" style="width:auto;padding:14px 28px;text-decoration:none;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.75a8.28 8.28 0 0 0 4.84 1.55V6.87a4.85 4.85 0 0 1-1.07-.18z"/></svg>
+                    Find on YouTube
+                </a>
+                <button onclick="skipFallback()" class="text-xs text-slate-600 underline">Skip — mark as playing anyway</button>
+            </div>
         </div>
 
         <!-- Mic visualizer -->
@@ -569,6 +584,10 @@ function playSong(song) {
     S.current = song;
     const frame = document.getElementById('yt-frame');
     const ph    = document.getElementById('p-placeholder');
+    const fb    = document.getElementById('yt-fallback');
+    const q = encodeURIComponent(`${song.title} ${song.artist} karaoke lyrics`);
+    document.getElementById('yt-fallback-link').href = `https://www.youtube.com/results?search_query=${q}`;
+    fb.classList.add('hidden');
     frame.src = `https://www.youtube.com/embed/${song.ytId}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3&enablejsapi=1`;
     setTimeout(() => applyMusicVol(), 2000);
     frame.classList.remove('hidden');
@@ -577,6 +596,11 @@ function playSong(song) {
     document.getElementById('p-artist').textContent = song.artist;
     document.getElementById('eq-bars').classList.remove('off');
     updateSingingNow();
+}
+
+function skipFallback() {
+    document.getElementById('yt-fallback').classList.add('hidden');
+    document.getElementById('p-placeholder').classList.remove('hidden');
 }
 
 function playNext() {
@@ -867,6 +891,21 @@ function toast(msg, type = 'ok') {
 function esc(s) {
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
+
+// ════════════════════════════════════════════════════════
+// YOUTUBE ERROR DETECTION
+// ════════════════════════════════════════════════════════
+window.addEventListener('message', (e) => {
+    if (!['https://www.youtube.com','https://www.youtube-nocookie.com'].includes(e.origin)) return;
+    try {
+        const d = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+        // Error codes 100=not found, 101/150=embedding blocked
+        if (d.event === 'onError' && [100,101,150].includes(d.info)) {
+            document.getElementById('yt-frame').classList.add('hidden');
+            document.getElementById('yt-fallback').classList.remove('hidden');
+        }
+    } catch(_) {}
+});
 
 // ════════════════════════════════════════════════════════
 // INIT
